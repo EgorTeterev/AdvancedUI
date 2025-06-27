@@ -21,6 +21,10 @@ public:
 		TSoftClassPtr<UAdvancedActivatableWidget>WidgetClass,
 		UPARAM(meta = (Categories = "UI.WidgetStack")) FGameplayTag WidgetStackTag, bool FocusPushedWidget = true);
 	
+	//~Begin UBlueprintAsyncActionBase interface
+	virtual void Activate() override;
+	//~End UBlueprintAsyncActionBase interface
+
 	UPROPERTY(BlueprintAssignable)
 	FOnPushedSoftWidgetDelegate OnWidgetCreatedBeforePush;
 

@@ -31,7 +31,7 @@ void UUISubsystem::RegisterPrimeLayoutWidget(UPrimaryLayoutWidget* LayoutWidgetT
 	LayoutWidget = LayoutWidgetToSet;
 }
 
-void UUISubsystem::PushSoftWidgetToStack(const FGameplayTag& WidgetStackTag, TSoftClassPtr<UAdvancedActivatableWidget> SoftWidgetClass,TFunction<void(EAsyncPushWidgetState, UAdvancedActivatableWidget*)> ASyncPushStateCallback)
+void UUISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& WidgetStackTag, TSoftClassPtr<UAdvancedActivatableWidget> SoftWidgetClass,TFunction<void(EAsyncPushWidgetState, UAdvancedActivatableWidget*)> ASyncPushStateCallback)
 {
 	//name is too long, Activatable widget stack is taked when async action ends,and lambda pushes 
 	typedef UCommonActivatableWidgetContainerBase WidgetStack;

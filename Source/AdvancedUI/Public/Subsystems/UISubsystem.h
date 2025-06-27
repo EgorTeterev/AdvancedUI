@@ -34,7 +34,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RegisterPrimeLayoutWidget(UPrimaryLayoutWidget* LayoutWidgetToSet);
 
-	void PushSoftWidgetToStack (const FGameplayTag& WidgetStackTag,TSoftClassPtr<UAdvancedActivatableWidget> SoftWidgetClass,TFunction<void(EAsyncPushWidgetState, UAdvancedActivatableWidget*)> ASyncPushStateCallback);
+	void PushSoftWidgetToStackAsync (const FGameplayTag& WidgetStackTag,TSoftClassPtr<UAdvancedActivatableWidget> SoftWidgetClass,TFunction<void(EAsyncPushWidgetState, UAdvancedActivatableWidget*)> ASyncPushStateCallback);
 private:
 	UPROPERTY(Transient)
 	UPrimaryLayoutWidget* LayoutWidget;

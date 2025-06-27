@@ -2,6 +2,7 @@
 
 
 #include "Async/AsyncPushSoftWidget.h"
+#include "Subsystems/UISubsystem.h"
 
 UAsyncPushSoftWidget* UAsyncPushSoftWidget::PushSoftWidget(const UObject* WorldContext, APlayerController* OwningPC, TSoftClassPtr<UAdvancedActivatableWidget> WidgetClass, UPARAM(meta = (Categories = "UI.WidgetStack"))FGameplayTag WidgetStackTag, bool FocusPushedWidget)
 {
@@ -27,4 +28,35 @@ UAsyncPushSoftWidget* UAsyncPushSoftWidget::PushSoftWidget(const UObject* WorldC
 	}
 
 	return nullptr;
+}
+
+void UAsyncPushSoftWidget::Activate()
+{
+	UUISubsystem* UISubsystem = UUISubsystem::Get(CachedOwningWorld.Get());
+	UISubsystem->PushSoftWidgetToStackAsync(CachedStackTag, CachedSoftWidgetClass,
+		[this](EAsyncPushWidgetState PushState, UAdvancedActivatableWidget* PushedWidget)
+		{
+			switch (PushState)
+			{
+			case EAsyncPushWidgetState::AfterPush:
+
+				PushedWidget->SetOwningPlayer(CachedOwningPC.Get());
+				OnWidgetCreatedBeforePush.Broadcast(PushedWidget);
+				break;
+			case EAsyncPushWidgetState::OnCreatedBeforePush:
+
+				OnWidgetAfterPush.Broadcast(PushedWidget);
+				if (bCachedFocusOnWidget)
+				{
+					if (UWidget* WidgetToFocus = PushedWidget->GetDesiredFocusTarget())
+					{
+						WidgetToFocus->SetFocus();
+					}
+				}
+				break;
+			default:
+				break;
+			}
+		}
+	);
 }
