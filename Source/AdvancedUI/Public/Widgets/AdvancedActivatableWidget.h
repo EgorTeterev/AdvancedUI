@@ -6,12 +6,16 @@
 #include "CommonActivatableWidget.h"
 #include "AdvancedActivatableWidget.generated.h"
 
-/**
- * 
- */
+class ACustomPlayerController;
+
 UCLASS(Abstract, BlueprintType, meta = (DisableNaiveTick))
 class ADVANCEDUI_API UAdvancedActivatableWidget : public UCommonActivatableWidget
 {
 	GENERATED_BODY()
 	
+protected:
+	UFUNCTION(BlueprintPure)
+	ACustomPlayerController* GetOwningPC();
+private:
+	TWeakObjectPtr<ACustomPlayerController> CachedOwningPC;
 };
