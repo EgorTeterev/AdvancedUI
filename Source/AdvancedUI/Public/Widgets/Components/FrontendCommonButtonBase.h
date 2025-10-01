@@ -33,5 +33,5 @@ private:
 	FText ButtonDescriptionText;
 
 	virtual void NativePreConstruct() override;
-
+	virtual void NativeOnCurrentTextStyleChanged() override;
 };
