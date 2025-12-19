@@ -7,7 +7,7 @@
 #include "Widgets/PrimaryLayoutWidget.h"
 #include "Widgets/AdvancedActivatableWidget.h"
 #include "UISubsystem.generated.h"
-
+class UFrontendCommonButtonBase;
 
 enum class EAsyncPushWidgetState : uint8
 {
@@ -15,6 +15,7 @@ enum class EAsyncPushWidgetState : uint8
 	AfterPush
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnButtonDescriptionUpdatedDelegate, UFrontendCommonButtonBase*, BroadcastingButton, FText, DescriptionText);
 
 UCLASS()
 class ADVANCEDUI_API UUISubsystem : public UGameInstanceSubsystem
@@ -23,7 +24,8 @@ class ADVANCEDUI_API UUISubsystem : public UGameInstanceSubsystem
 	
 public:
 	static UUISubsystem* Get(const UObject* WorldContextObject);
-
+	UPROPERTY(BlueprintAssignable)
+	FOnButtonDescriptionUpdatedDelegate OnButtonDescriptionTextUpdated;
 
 	//~Begin Subsystem Interface
 	virtual bool ShouldCreateSubsystem(UObject* Outer) const override;
