@@ -54,6 +54,6 @@ void UFrontendCommonButtonBase::NativeOnUnhovered()
 
 	if (!ButtonDescriptionText.IsEmpty())
 	{
-		UUISubsystem::Get(this)->OnButtonDescriptionTextUpdated.Broadcast(this, FText());
+		UUISubsystem::Get(this)->OnButtonDescriptionTextUpdated.Broadcast(this, FText ());
 	}
 }
