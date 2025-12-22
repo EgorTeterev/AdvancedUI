@@ -5,7 +5,7 @@
 #include "CommonTextBlock.h"
 #include "Subsystems/UISubsystem.h"
 
-void UFrontendCommonButtonBase::SetButtonText(FText& Text)
+void UFrontendCommonButtonBase::SetButtonText(FText Text)
 {
 	if (CommonTextBlock_Button && !Text.IsEmpty())
 	{

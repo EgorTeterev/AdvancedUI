@@ -17,7 +17,7 @@ class ADVANCEDUI_API UFrontendCommonButtonBase : public UCommonButtonBase
 	
 public:
 	UFUNCTION(BlueprintCallable)
-	void SetButtonText(FText& Text);
+	void SetButtonText(FText Text);
 
 private:
 	UPROPERTY(meta=(BindWidgetOptional))
