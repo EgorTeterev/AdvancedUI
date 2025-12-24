@@ -3,6 +3,9 @@
 
 #include "Subsystems/UISubsystem.h"
 #include "Engine/AssetManager.h"
+#include "Widgets/ConfirmScreenWidget.h"
+#include "Tags/UIGameplayTags.h"
+#include "FrontendFunctionLibrary.h"
 #include "Widgets/CommonActivatableWidgetContainer.h"
 
 UUISubsystem* UUISubsystem::Get(const UObject* WorldContextObject)
@@ -29,6 +32,46 @@ void UUISubsystem::RegisterPrimeLayoutWidget(UPrimaryLayoutWidget* LayoutWidgetT
 {
 	check(LayoutWidgetToSet);
 	LayoutWidget = LayoutWidgetToSet;
+}
+
+void UUISubsystem::PushConfirmScreenToModalStackAsync(EConfirmScreenType ScreenType, const FText& ScreenTitle, const FText& ScreenMessage, TFunction<void(EConfirmScreenButtonType)> ButtonCallback)
+{
+	UConfirmInfoObject* ConfirmInfoObj{};
+
+	switch (ScreenType)
+	{
+	case EConfirmScreenType::Ok:
+		ConfirmInfoObj = UConfirmInfoObject::CreateOKScreen(ScreenTitle,ScreenMessage);
+		break;
+
+	case EConfirmScreenType::YesOrNo:
+		ConfirmInfoObj = UConfirmInfoObject::CreateYesOrNoScreen(ScreenTitle, ScreenMessage);
+		break;
+
+	case EConfirmScreenType::OkOrCancle:
+		ConfirmInfoObj = UConfirmInfoObject::CreateOkOrCancelScreen(ScreenTitle, ScreenMessage);
+		break;
+
+	case EConfirmScreenType::Unknown:
+		break;
+	default:
+		break;
+	}
+	check(ConfirmInfoObj);
+
+	PushSoftWidgetToStackAsync(
+		UIGameplayTags::UI_WidgetStack_Modal, 
+		UFrontendFunctionLibrary::GetFrontendSoftWidgetClassByTag(UIGameplayTags::UI_Widget_ConfirmScreen),
+		[ConfirmInfoObj, ButtonCallback](EAsyncPushWidgetState PushState, UAdvancedActivatableWidget* PushedWidget)
+		{
+			if (PushState == EAsyncPushWidgetState::OnCreatedBeforePush)
+			{
+				UConfirmScreenWidget* CreatedConfirmScreen = CastChecked<UConfirmScreenWidget>(PushedWidget);
+				CreatedConfirmScreen->InitComfirmScreen(ConfirmInfoObj, ButtonCallback);
+			}
+		}
+	);
+
 }
 
 void UUISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& WidgetStackTag, TSoftClassPtr<UAdvancedActivatableWidget> SoftWidgetClass,TFunction<void(EAsyncPushWidgetState, UAdvancedActivatableWidget*)> ASyncPushStateCallback)

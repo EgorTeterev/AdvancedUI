@@ -15,5 +15,6 @@ namespace UIGameplayTags
 	//Widget soft classes
 	ADVANCEDUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(UI_Widget_PressAnyKeyScreen);
 	ADVANCEDUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(UI_Widget_MainMenuScreen);
+	ADVANCEDUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(UI_Widget_ConfirmScreen);
 
 }

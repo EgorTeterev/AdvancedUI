@@ -6,7 +6,11 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "Widgets/PrimaryLayoutWidget.h"
 #include "Widgets/AdvancedActivatableWidget.h"
+#include "Types/AdvancedUIEnumTypes.h"
 #include "UISubsystem.generated.h"
+
+
+
 class UFrontendCommonButtonBase;
 
 enum class EAsyncPushWidgetState : uint8
@@ -35,6 +39,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void RegisterPrimeLayoutWidget(UPrimaryLayoutWidget* LayoutWidgetToSet);
+
+	void PushConfirmScreenToModalStackAsync(EConfirmScreenType ScreenType, const FText& ScreenTitle, const FText& ScreenMessage,TFunction<void(EConfirmScreenButtonType)> ButtonCallback);
 
 	void PushSoftWidgetToStackAsync (const FGameplayTag& WidgetStackTag,TSoftClassPtr<UAdvancedActivatableWidget> SoftWidgetClass,TFunction<void(EAsyncPushWidgetState, UAdvancedActivatableWidget*)> ASyncPushStateCallback);
 private:
