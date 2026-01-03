@@ -10,32 +10,27 @@ void UOptionsScreenWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	if (ResetAction.IsNull())
+	if (!ResetAction.IsNull())
 	{
-		return;
+		ResetActionHandle = RegisterUIActionBinding(FBindUIActionArgs(ResetAction, true, FSimpleDelegate::CreateUObject(this, &ThisClass::OnResetBoundActionTriggered)));
 	}
 	
-	
-	ResetActionHandle = RegisterUIActionBinding(FBindUIActionArgs(ResetAction, true, FSimpleDelegate::CreateUObject(this, &UOptionsScreenWidget::OnResetBoundActionTriggered)));
-
 	RegisterUIActionBinding(
 		FBindUIActionArgs(ICommonInputModule::GetSettings().GetDefaultBackAction(),
 			true,
 			FSimpleDelegate::CreateUObject(
 				this,
-				&UOptionsScreenWidget::OnBackActionTriggered)
+				&ThisClass::OnBackActionTriggered)
 		)
 	);
 }
 
 void UOptionsScreenWidget::OnResetBoundActionTriggered()
 {
-	DeactivateWidget();
+	AUIDebug::ConsoleMessage(TEXT("Reset"));
 }
 
 void UOptionsScreenWidget::OnBackActionTriggered()
 {
-	AUIDebug::ConsoleMessage(TEXT("Back action works"));
-	//DeactivateWidget();
-
+	DeactivateWidget();
 }
