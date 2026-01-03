@@ -11,7 +11,7 @@
 
 
 
-class UFrontendCommonButtonBase;
+class UUFrontendCommonButtonBase;
 
 enum class EAsyncPushWidgetState : uint8
 {
