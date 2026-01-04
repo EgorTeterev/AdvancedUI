@@ -9,8 +9,12 @@
 
 void UAdvancedTabListWidgetBase::RequestRegisterTab(const FName& TabID, const FText& TabDisplayName)
 {
+	RegisterTab(TabID, TabEntryButtonWidget, nullptr);
 
-
+	if (UFrontendCommonButtonBase* FoundButton = Cast<UFrontendCommonButtonBase>(GetTabButtonBaseByID(TabID)))
+	{
+		FoundButton->SetButtonText(TabDisplayName);
+	}
 }
 
 
