@@ -26,7 +26,7 @@ private:
 
 	//Bound Widgets
 	UPROPERTY(meta=(BindWidget))
-	UAdvancedTabListWidgetBase* WidgetOptionTabs;
+	UAdvancedTabListWidgetBase* OptionsTabListWidget;
 
 
 	//Through this pointer is handled the creation of data in option screen
@@ -38,6 +38,7 @@ private:
 
 	FUIActionBindingHandle ResetActionHandle;
 
-
+	UFUNCTION()
+	void OnOptionsTabSelected(FName TabId);
 
 };

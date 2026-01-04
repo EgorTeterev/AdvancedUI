@@ -26,6 +26,9 @@ void UOptionsScreenWidget::NativeOnInitialized()
 				&ThisClass::OnBackActionTriggered)
 		)
 	);
+
+	OptionsTabListWidget->OnTabSelected.AddUniqueDynamic(this, &ThisClass::OnOptionsTabSelected);
+
 }
 
 void UOptionsScreenWidget::OnResetBoundActionTriggered()
@@ -36,6 +39,11 @@ void UOptionsScreenWidget::OnResetBoundActionTriggered()
 void UOptionsScreenWidget::OnBackActionTriggered()
 {
 	DeactivateWidget();
+}
+
+void UOptionsScreenWidget::OnOptionsTabSelected(FName TabId)
+{
+
 }
 
 UOptionsDataRegistry* UOptionsScreenWidget::GetOrCreateDataRegistry()
@@ -63,12 +71,12 @@ void UOptionsScreenWidget::NativeOnActivated()
 		}
 		const FName TabId = TabCollection->GetDataId();
 
-		if (WidgetOptionTabs->GetTabButtonBaseByID(TabId) != nullptr)
+		if (OptionsTabListWidget->GetTabButtonBaseByID(TabId) != nullptr)
 		{
 			continue;
 		}
 
-		WidgetOptionTabs->RequestRegisterTab(TabId, TabCollection->GetDataDisplayName());
+		OptionsTabListWidget->RequestRegisterTab(TabId, TabCollection->GetDataDisplayName());
 
 	}
 }
