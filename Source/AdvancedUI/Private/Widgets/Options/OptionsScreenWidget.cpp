@@ -4,6 +4,9 @@
 #include "Widgets/Options/OptionsScreenWidget.h"
 #include "Input/CommonUIInputTypes.h"
 #include "ICommonInputModule.h"
+#include "Widgets/Options/OptionsDataRegistry.h"
+#include "Widgets/Components/AdvancedTabListWidgetBase.h"
+#include "Widgets/Options/DataObjects/ListDataObjectCollection.h"
 #include "DebugHelper.h"
 
 void UOptionsScreenWidget::NativeOnInitialized()
@@ -33,4 +36,39 @@ void UOptionsScreenWidget::OnResetBoundActionTriggered()
 void UOptionsScreenWidget::OnBackActionTriggered()
 {
 	DeactivateWidget();
+}
+
+UOptionsDataRegistry* UOptionsScreenWidget::GetOrCreateDataRegistry()
+{
+	if (!CreatedOwningDataRegistery)
+	{
+		CreatedOwningDataRegistery = NewObject<UOptionsDataRegistry>();
+		CreatedOwningDataRegistery->InitOptionsDataRegistry(GetOwningLocalPlayer());
+	}
+
+	checkf(CreatedOwningDataRegistery,TEXT("Data registry in not valid	"));
+
+	return CreatedOwningDataRegistery;
+}
+
+void UOptionsScreenWidget::NativeOnActivated()
+{
+	Super::NativeOnActivated();
+
+	for (auto TabCollection : GetOrCreateDataRegistry()->GetRegisteredOptionCollections())
+	{
+		if (!TabCollection)
+		{
+			continue;
+		}
+		const FName TabId = TabCollection->GetDataId();
+
+		if (WidgetOptionTabs->GetTabButtonBaseByID(TabId) != nullptr)
+		{
+			continue;
+		}
+
+		WidgetOptionTabs->RequestRegisterTab(TabId, TabCollection->GetDataDisplayName());
+
+	}
 }

@@ -10,7 +10,6 @@
 FORCEINLINE DataType Get##PropertyName() const {return PropertyName;}; \
 void Set##PropertyName (DataType PropertyName##ToSet) {PropertyName = PropertyName##ToSet;};
 
-
 /**
  * 
  */

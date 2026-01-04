@@ -5,6 +5,16 @@
 #include "Widgets/Components/FrontendCommonButtonBase.h"
 #include "Editor/WidgetCompilerLog.h"
 
+
+
+void UAdvancedTabListWidgetBase::RequestRegisterTab(const FName& TabID, const FText& TabDisplayName)
+{
+
+
+}
+
+
+
 #if WITH_EDITOR
 void UAdvancedTabListWidgetBase::ValidateCompiledDefaults(class IWidgetCompilerLog& CompileLog) const
 {

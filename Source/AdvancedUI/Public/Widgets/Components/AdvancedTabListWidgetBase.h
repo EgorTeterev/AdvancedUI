@@ -15,6 +15,9 @@ class ADVANCEDUI_API UAdvancedTabListWidgetBase : public UCommonTabListWidgetBas
 {
 	GENERATED_BODY()
 	
+public:
+	void RequestRegisterTab(const FName& TabID, const FText& TabDisplayName);
+
 protected:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category = "UI Tab list settings", meta = (AllowPrivateAccess = "true",ClampMin = "1",ClampMax = "10"))
 	int32 DebugPreviewTabCount = 3;

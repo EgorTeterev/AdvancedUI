@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Widgets/Options/ObjectDataRegistry.h"
+#include "Widgets/Options/OptionsDataRegistry.h"
 #include "Widgets/Options/DataObjects/ListDataObjectCollection.h"
 
 
-void UObjectDataRegistry::InitOptionsDataRegistry(ULocalPlayer* OwningPlayer)
+void UOptionsDataRegistry::InitOptionsDataRegistry(ULocalPlayer* OwningPlayer)
 {
 	InitGameplayTab();
 	InitAudioTab();
@@ -13,7 +13,7 @@ void UObjectDataRegistry::InitOptionsDataRegistry(ULocalPlayer* OwningPlayer)
 	InitControlTab();
 }
 
-void UObjectDataRegistry::InitGameplayTab()
+void UOptionsDataRegistry::InitGameplayTab()
 {
 	UListDataObjectCollection* NewGameplayOptionsCollection = NewObject<UListDataObjectCollection>();
 	NewGameplayOptionsCollection->SetDataId(FName("GameplayOptionsCollection"));
@@ -22,7 +22,7 @@ void UObjectDataRegistry::InitGameplayTab()
 	RegisteredOptionsTabCollections.Add(NewGameplayOptionsCollection);
 }
 
-void UObjectDataRegistry::InitAudioTab()
+void UOptionsDataRegistry::InitAudioTab()
 {
 	UListDataObjectCollection* NewAudioOptionsCollection = NewObject<UListDataObjectCollection>();
 	NewAudioOptionsCollection->SetDataId(FName("AudioOptionsCollection"));
@@ -32,7 +32,7 @@ void UObjectDataRegistry::InitAudioTab()
 
 }
 
-void UObjectDataRegistry::InitVideoTab()
+void UOptionsDataRegistry::InitVideoTab()
 {
 	UListDataObjectCollection* NewVideoOptionsCollection = NewObject<UListDataObjectCollection>();
 	NewVideoOptionsCollection->SetDataId(FName("VideoOptionsCollection"));
@@ -41,7 +41,7 @@ void UObjectDataRegistry::InitVideoTab()
 	RegisteredOptionsTabCollections.Add(NewVideoOptionsCollection);
 }
 
-void UObjectDataRegistry::InitControlTab()
+void UOptionsDataRegistry::InitControlTab()
 {
 	UListDataObjectCollection* NewControlOptionsCollection = NewObject<UListDataObjectCollection>();
 	NewControlOptionsCollection->SetDataId(FName("ControlOptionsCollection"));

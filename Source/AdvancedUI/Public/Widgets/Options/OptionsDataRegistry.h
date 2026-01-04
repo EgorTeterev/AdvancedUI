@@ -4,14 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "ObjectDataRegistry.generated.h"
+#include "OptionsDataRegistry.generated.h"
 
 class UListDataObjectCollection;
 /**
  * 
  */
 UCLASS()
-class ADVANCEDUI_API UObjectDataRegistry : public UObject
+class ADVANCEDUI_API UOptionsDataRegistry : public UObject
 {
 	GENERATED_BODY()
 	
