@@ -6,6 +6,7 @@
 #include "Widgets/AdvancedActivatableWidget.h"
 #include "OptionsScreenWidget.generated.h"
 
+class UAdvancedCommonListView;
 class UOptionsDataRegistry;
 class UAdvancedTabListWidgetBase;
 
@@ -28,10 +29,13 @@ private:
 	UPROPERTY(meta=(BindWidget))
 	UAdvancedTabListWidgetBase* OptionsTabListWidget;
 
+	UPROPERTY(meta = (BindWidget))
+	UAdvancedCommonListView* OptionsCommonListView;
 
 	//Through this pointer is handled the creation of data in option screen
 	UPROPERTY(Transient)
 	UOptionsDataRegistry* CreatedOwningDataRegistery;
+
 
 	UPROPERTY(EditDefaultsOnly, Category = "Frontend Options Screen", meta = (RowType = "/Script/CommonUI.CommonInputActionDataBase"))
 	FDataTableRowHandle ResetAction;
