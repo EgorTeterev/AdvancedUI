@@ -43,6 +43,6 @@ private:
 	FUIActionBindingHandle ResetActionHandle;
 
 	UFUNCTION()
-	void OnOptionsTabSelected(FName TabId);
+	void OnOptionsTabSelected(FName TabID);
 
 };

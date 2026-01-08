@@ -7,6 +7,7 @@
 #include "Widgets/Options/OptionsDataRegistry.h"
 #include "Widgets/Components/AdvancedTabListWidgetBase.h"
 #include "Widgets/Options/DataObjects/ListDataObjectCollection.h"
+#include "Widgets/Components/AdvancedCommonListView.h"
 #include "DebugHelper.h"
 
 void UOptionsScreenWidget::NativeOnInitialized()
@@ -41,8 +42,18 @@ void UOptionsScreenWidget::OnBackActionTriggered()
 	DeactivateWidget();
 }
 
-void UOptionsScreenWidget::OnOptionsTabSelected(FName TabId)
+void UOptionsScreenWidget::OnOptionsTabSelected(FName TabID)
 {
+	TArray<UListDataObjectBase*> FoundListOfTabItems = GetOrCreateDataRegistry()->GetListSourceItemsBySelectedTabID(TabID);
+
+	OptionsCommonListView->SetListItems(FoundListOfTabItems);
+	OptionsCommonListView->RequestRefresh();
+
+	if (OptionsCommonListView->GetNumItems() != 0)
+	{
+		OptionsCommonListView->NavigateToIndex(0);
+		OptionsCommonListView->SetSelectedIndex(0);
+	}
 
 }
 
@@ -69,14 +80,14 @@ void UOptionsScreenWidget::NativeOnActivated()
 		{
 			continue;
 		}
-		const FName TabId = TabCollection->GetDataId();
+		const FName TabID = TabCollection->GetDataID();
 
-		if (OptionsTabListWidget->GetTabButtonBaseByID(TabId) != nullptr)
+		if (OptionsTabListWidget->GetTabButtonBaseByID(TabID) != nullptr)
 		{
 			continue;
 		}
 
-		OptionsTabListWidget->RequestRegisterTab(TabId, TabCollection->GetDataDisplayName());
+		OptionsTabListWidget->RequestRegisterTab(TabID, TabCollection->GetDataDisplayName());
 
 	}
 }

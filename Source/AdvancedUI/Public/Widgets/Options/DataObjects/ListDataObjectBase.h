@@ -19,7 +19,7 @@ class ADVANCEDUI_API UListDataObjectBase : public UObject
 	GENERATED_BODY()
 	
 public:
-	LIST_DATA_ACCESSORS(FName, DataId);
+	LIST_DATA_ACCESSORS(FName, DataID);
 	LIST_DATA_ACCESSORS(FText, DataDisplayName);
 	LIST_DATA_ACCESSORS(FText, DescriptionRichText);
 	LIST_DATA_ACCESSORS(FText, DisabledRichText);
@@ -35,7 +35,7 @@ protected:
 	virtual void OnDataObjectInitialized();
 
 private:
-	FName DataId;
+	FName DataID;
 	FText DataDisplayName;
 	FText DescriptionRichText;
 	FText DisabledRichText;
