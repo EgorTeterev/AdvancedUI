@@ -2,6 +2,7 @@
 
 
 #include "Widgets/Options/OptionsDataRegistry.h"
+#include "Widgets/Options/DataObjects/ListDataObject_String.h"
 #include "Widgets/Options/DataObjects/ListDataObjectCollection.h"
 
 
@@ -18,6 +19,18 @@ void UOptionsDataRegistry::InitGameplayTab()
 	UListDataObjectCollection* NewGameplayOptionsCollection = NewObject<UListDataObjectCollection>();
 	NewGameplayOptionsCollection->SetDataId(FName("GameplayOptionsCollection"));
 	NewGameplayOptionsCollection->SetDataDisplayName(FText::FromString(TEXT("Gameplay")));
+
+	//Game Difficulty
+	{
+		UListDataObject_String* GameDifficulty = NewObject<UListDataObject_String>();
+
+		GameDifficulty->SetDataId(FName("GameDifficulty"));
+		GameDifficulty->SetDataDisplayName(FText::FromString(TEXT("Difficulty")));
+
+		NewGameplayOptionsCollection->AddChildList(GameDifficulty);
+	}
+
+
 
 	RegisteredOptionsTabCollections.Add(NewGameplayOptionsCollection);
 }
