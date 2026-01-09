@@ -13,7 +13,7 @@ void Set##PropertyName (DataType PropertyName##ToSet) {PropertyName = PropertyNa
 /**
  * 
  */
-UCLASS()
+UCLASS(Abstract)
 class ADVANCEDUI_API UListDataObjectBase : public UObject
 {
 	GENERATED_BODY()

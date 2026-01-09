@@ -6,6 +6,7 @@
 #include "CommonListView.h"
 #include "AdvancedCommonListView.generated.h"
 
+class UDA_DataListEntryMapping;
 /**
  * 
  */
@@ -14,4 +15,16 @@ class ADVANCEDUI_API UAdvancedCommonListView : public UCommonListView
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual UUserWidget& OnGenerateEntryWidgetInternal(UObject* Item, TSubclassOf<UUserWidget> DesiredEntryClass, const TSharedRef<STableViewBase>& OwnerTable) override;
+
+
+private:
+
+#if WITH_EDITOR
+	virtual void ValidateCompiledDefaults(class IWidgetCompilerLog& CompileLog) const override;
+#endif
+
+	UPROPERTY(EditAnywhere,Category = "List view settings")
+	UDA_DataListEntryMapping* DataListEntryMapping;
 };
