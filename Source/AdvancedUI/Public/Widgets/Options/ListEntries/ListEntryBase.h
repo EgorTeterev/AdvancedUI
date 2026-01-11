@@ -8,6 +8,7 @@
 #include "ListEntryBase.generated.h"
 
 class UCommonTextBlock;
+class UListDataObjectBase;
 /**
  *
  */
@@ -18,6 +19,7 @@ class ADVANCEDUI_API UListEntryBase : public UCommonUserWidget , public IUserObj
 
 protected:
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
+	virtual void OnOwningListDataObjectSet(UListDataObjectBase* OwningListDataObject);
 
 private:
 	UPROPERTY(BlueprintReadOnly,meta=(BindWidgetOptional,AllowPrivateAccess = "true"))

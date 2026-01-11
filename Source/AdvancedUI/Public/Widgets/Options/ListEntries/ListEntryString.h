@@ -18,13 +18,13 @@ class ADVANCEDUI_API UListEntryString : public UListEntryBase
 
 private:
 	UPROPERTY(BlueprintReadOnly,meta = (BindWidget,AllowPrivateAccess = "true"))
-	UFrontendCommonButtonBase* DecreseCommonButton;
+	UFrontendCommonButtonBase* PreviousOptionCommonButton;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess = "true"))
 	UAdvancedCommonRotator* OptionCommonRotator;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess = "true"))
-	UFrontendCommonButtonBase* IncreseCommonButton;
+	UFrontendCommonButtonBase* NextOptionCommonButton;
 
 
 };

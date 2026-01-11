@@ -3,3 +3,35 @@
 
 #include "Widgets/Options/DataObjects/ListDataObject_String.h"
 
+void UListDataObject_String::AddDynamicOption(const FString& AddOptionString, const FText& AddDisplayText)
+{
+	AvailableOptionsStringArray.Add(AddOptionString);
+	AvailableOptionsTextArray.Add(AddDisplayText);
+}
+
+void UListDataObject_String::OnDataObjectInitialized()
+{
+	if (!AvailableOptionsStringArray.IsEmpty())
+	{
+		CurrentStringValue = AvailableOptionsStringArray[0];
+	}
+
+	if (!TrySetDisplayTextFromStringValue(CurrentStringValue))
+	{
+		CurrentDisplayText = FText::FromString(TEXT("Invalid option"));
+	}
+
+}
+
+bool UListDataObject_String::TrySetDisplayTextFromStringValue(const FString& String)
+{
+	const int32 Index = AvailableOptionsStringArray.IndexOfByKey(String);
+
+	if (AvailableOptionsTextArray.IsValidIndex(Index))
+	{
+		CurrentDisplayText = AvailableOptionsTextArray[Index];
+		return true;
+	}
+
+	return false;
+}

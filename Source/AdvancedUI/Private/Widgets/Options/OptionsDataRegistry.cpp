@@ -41,11 +41,22 @@ void UOptionsDataRegistry::InitGameplayTab()
 
 		GameDifficulty->SetDataID(FName("GameDifficulty"));
 		GameDifficulty->SetDataDisplayName(FText::FromString(TEXT("Difficulty")));
+		GameDifficulty->AddDynamicOption(TEXT("Easy"),FText::FromString(TEXT("Easy")));
+		GameDifficulty->AddDynamicOption(TEXT("Normal"), FText::FromString(TEXT("Normal")));
+		GameDifficulty->AddDynamicOption(TEXT("Hard"), FText::FromString(TEXT("Hard")));
 
 		NewGameplayOptionsCollection->AddChildList(GameDifficulty);
 	}
 
+	//Really long
+	{
+		UListDataObject_String* test = NewObject<UListDataObject_String>();
 
+		test->SetDataID(FName("Really long name test"));
+		test->SetDataDisplayName(FText::FromString(TEXT("Really long name of option in list to check widget")));
+
+		NewGameplayOptionsCollection->AddChildList(test);
+	}
 
 	RegisteredOptionsTabCollections.Add(NewGameplayOptionsCollection);
 }
