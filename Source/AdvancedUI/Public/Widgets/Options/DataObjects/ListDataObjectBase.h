@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "Types/AdvancedUIEnumTypes.h"
 #include "ListDataObjectBase.generated.h"
 
 #define LIST_DATA_ACCESSORS(DataType,PropertyName) \
@@ -19,6 +20,9 @@ class ADVANCEDUI_API UListDataObjectBase : public UObject
 	GENERATED_BODY()
 	
 public:
+	DECLARE_MULTICAST_DELEGATE_TwoParams(FOnListDataModifiedDelegate, UListDataObjectBase*, EOptionsListDataModifyReason);
+	FOnListDataModifiedDelegate OnListDataModified;
+
 	LIST_DATA_ACCESSORS(FName, DataID);
 	LIST_DATA_ACCESSORS(FText, DataDisplayName);
 	LIST_DATA_ACCESSORS(FText, DescriptionRichText);
@@ -30,9 +34,10 @@ public:
 
 	virtual TArray<UListDataObjectBase*> GetAllChildListData() const { return TArray<UListDataObjectBase*>(); };
 	virtual bool HasAnyChildListData() const { return false; };
-protected:
 
+protected:
 	virtual void OnDataObjectInitialized();
+	virtual void NotifyListDataModified(UListDataObjectBase* ModifiedData, EOptionsListDataModifyReason ModifyReason = EOptionsListDataModifyReason::DirectlyModified);
 
 private:
 	FName DataID;

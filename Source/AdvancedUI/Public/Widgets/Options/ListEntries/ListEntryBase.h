@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "CommonUserWidget.h"
 #include "Blueprint/IUserObjectListEntry.h"
+#include "Types/AdvancedUIEnumTypes.h"
 #include "ListEntryBase.generated.h"
 
 class UCommonTextBlock;
@@ -19,7 +20,12 @@ class ADVANCEDUI_API UListEntryBase : public UCommonUserWidget , public IUserObj
 
 protected:
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
+	
+	//The child widget class can override this function to handle initialization.
 	virtual void OnOwningListDataObjectSet(UListDataObjectBase* OwningListDataObject);
+
+	//The child widget class override this function to update UI values after its data was modified.
+	virtual void OnOwningListDataObjectModified(UListDataObjectBase* OwningModifiedData, EOptionsListDataModifyReason ModifyReason);
 
 private:
 	UPROPERTY(BlueprintReadOnly,meta=(BindWidgetOptional,AllowPrivateAccess = "true"))

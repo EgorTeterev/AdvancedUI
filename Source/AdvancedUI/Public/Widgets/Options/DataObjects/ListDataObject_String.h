@@ -16,6 +16,11 @@ class ADVANCEDUI_API UListDataObject_String : public UListDataObject_Value
 	
 public:
 	void AddDynamicOption(const FString& AddOptionString, const FText& AddDisplayText);
+	void SwitchToNextOption();
+	void SwitchToPreviousOption();
+
+	FORCEINLINE const TArray<FText>& GetOptionsTextArray() const { return AvailableOptionsTextArray; };
+	FORCEINLINE const FText GetCurrentDisplayText() const { return CurrentDisplayText; };
 
 protected:
 	virtual void OnDataObjectInitialized() override;

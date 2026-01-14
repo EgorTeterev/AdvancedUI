@@ -8,6 +8,7 @@
 
 class UFrontendCommonButtonBase;
 class UAdvancedCommonRotator;
+class UListDataObject_String;
 /**
  * 
  */
@@ -16,7 +17,17 @@ class ADVANCEDUI_API UListEntryString : public UListEntryBase
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void NativeOnInitialized() override;
+	virtual void OnOwningListDataObjectSet(UListDataObjectBase* OwningListDataObject) override;
+
+
+	virtual void OnOwningListDataObjectModified(UListDataObjectBase* OwningModifiedData, EOptionsListDataModifyReason ModifyReason) override;
+
 private:
+	void OnPreviousOptionButtonClicked();
+	void OnNextOptionButtonClicked();
+
 	UPROPERTY(BlueprintReadOnly,meta = (BindWidget,AllowPrivateAccess = "true"))
 	UFrontendCommonButtonBase* PreviousOptionCommonButton;
 
@@ -26,5 +37,6 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess = "true"))
 	UFrontendCommonButtonBase* NextOptionCommonButton;
 
-
+	UPROPERTY(Transient)
+	UListDataObject_String* CachedDataObject;
 };
