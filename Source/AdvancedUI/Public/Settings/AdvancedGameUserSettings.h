@@ -13,5 +13,11 @@ UCLASS()
 class ADVANCEDUI_API UAdvancedGameUserSettings : public UGameUserSettings
 {
 	GENERATED_BODY()
+
+public:
+	static UAdvancedGameUserSettings* Get();
 	
+private:
+	UPROPERTY(Config)
+	FString CurrentGameDifficulty;
 };
