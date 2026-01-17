@@ -8,6 +8,7 @@
 #include "Widgets/Components/AdvancedTabListWidgetBase.h"
 #include "Widgets/Options/DataObjects/ListDataObjectCollection.h"
 #include "Widgets/Components/AdvancedCommonListView.h"
+#include "Settings/AdvancedGameUserSettings.h"
 #include "DebugHelper.h"
 
 void UOptionsScreenWidget::NativeOnInitialized()
@@ -30,6 +31,12 @@ void UOptionsScreenWidget::NativeOnInitialized()
 
 	OptionsTabListWidget->OnTabSelected.AddUniqueDynamic(this, &ThisClass::OnOptionsTabSelected);
 
+}
+void UOptionsScreenWidget::NativeOnDeactivated()
+{
+	Super::NativeOnDeactivated();
+
+	UAdvancedGameUserSettings::Get()->ApplySettings(true);
 }
 
 void UOptionsScreenWidget::OnResetBoundActionTriggered()

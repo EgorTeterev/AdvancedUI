@@ -17,6 +17,12 @@ class ADVANCEDUI_API UAdvancedGameUserSettings : public UGameUserSettings
 public:
 	static UAdvancedGameUserSettings* Get();
 	
+	UFUNCTION()
+	FString GetCurrentGameDifficulty() const { return CurrentGameDifficulty; };
+
+	UFUNCTION()
+	void SetCurrentGameDifficulty(const FString& NewDifficulty) { CurrentGameDifficulty = NewDifficulty; };
+
 private:
 	UPROPERTY(Config)
 	FString CurrentGameDifficulty;
