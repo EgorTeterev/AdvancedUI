@@ -9,6 +9,7 @@
 #include "Widgets/Options/DataObjects/ListDataObjectCollection.h"
 #include "Widgets/Components/AdvancedCommonListView.h"
 #include "Settings/AdvancedGameUserSettings.h"
+#include "Widgets/Options/ListEntries/ListEntryBase.h"
 #include "DebugHelper.h"
 
 void UOptionsScreenWidget::NativeOnInitialized()
@@ -31,6 +32,8 @@ void UOptionsScreenWidget::NativeOnInitialized()
 
 	OptionsTabListWidget->OnTabSelected.AddUniqueDynamic(this, &ThisClass::OnOptionsTabSelected);
 
+	OptionsCommonListView->OnItemIsHoveredChanged().AddUObject(this, &ThisClass::OnListViewItemHovered);
+	OptionsCommonListView->OnItemSelectionChanged().AddUObject(this, &ThisClass::OnListViewItemSelected);
 }
 void UOptionsScreenWidget::NativeOnDeactivated()
 {
@@ -47,6 +50,28 @@ void UOptionsScreenWidget::OnResetBoundActionTriggered()
 void UOptionsScreenWidget::OnBackActionTriggered()
 {
 	DeactivateWidget();
+}
+
+void UOptionsScreenWidget::OnListViewItemSelected(UObject* SelectedItem)
+{
+	if (!SelectedItem)
+	{
+		return;
+	}
+}
+
+void UOptionsScreenWidget::OnListViewItemHovered(UObject* HoveredListItem, bool WasHovered)
+{
+	if (!HoveredListItem)
+	{
+		return;
+	}
+
+	UListEntryBase* HoveredEnryWidget = OptionsCommonListView->GetEntryWidgetFromItem<UListEntryBase>(HoveredListItem);
+
+	check(HoveredEnryWidget);
+
+	HoveredEnryWidget->NativeOnListEntryWidgetHovered(WasHovered);
 }
 
 void UOptionsScreenWidget::OnOptionsTabSelected(FName TabID)

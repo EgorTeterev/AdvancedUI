@@ -18,6 +18,11 @@ class ADVANCEDUI_API UListEntryBase : public UCommonUserWidget , public IUserObj
 {
 	GENERATED_BODY()
 
+public:
+	UFUNCTION(BlueprintImplementableEvent,meta=(DisplayName ="On List Entry Widget Hovered"))
+	void BP_OnListEntryWidgetHovered(bool bWasHovered,bool bIsEntryWidgetStillSelected);
+	void NativeOnListEntryWidgetHovered(bool bWasHovered);
+
 protected:
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
 	
@@ -26,6 +31,8 @@ protected:
 
 	//The child widget class override this function to update UI values after its data was modified.
 	virtual void OnOwningListDataObjectModified(UListDataObjectBase* OwningModifiedData, EOptionsListDataModifyReason ModifyReason);
+
+	void SelectThisEntryWidget();
 
 private:
 	UPROPERTY(BlueprintReadOnly,meta=(BindWidgetOptional,AllowPrivateAccess = "true"))

@@ -23,8 +23,14 @@ protected:
 private:
 
 	UOptionsDataRegistry* GetOrCreateDataRegistry();
+
 	void OnResetBoundActionTriggered();
 	void OnBackActionTriggered();
+	void OnListViewItemSelected(UObject* SelectedItem);
+	void OnListViewItemHovered(UObject* HoveredListItem, bool WasHovered);
+
+	UFUNCTION()
+	void OnOptionsTabSelected(FName TabID);
 
 	//Bound Widgets
 	UPROPERTY(meta=(BindWidget))
@@ -43,7 +49,6 @@ private:
 
 	FUIActionBindingHandle ResetActionHandle;
 
-	UFUNCTION()
-	void OnOptionsTabSelected(FName TabID);
 
+	
 };
