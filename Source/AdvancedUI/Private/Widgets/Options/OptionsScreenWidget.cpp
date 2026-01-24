@@ -10,6 +10,7 @@
 #include "Widgets/Components/AdvancedCommonListView.h"
 #include "Settings/AdvancedGameUserSettings.h"
 #include "Widgets/Options/ListEntries/ListEntryBase.h"
+#include "Widgets/Options/OptionsDetailsView.h"
 #include "DebugHelper.h"
 
 void UOptionsScreenWidget::NativeOnInitialized()
@@ -58,9 +59,12 @@ void UOptionsScreenWidget::OnListViewItemSelected(UObject* SelectedItem)
 	{
 		return;
 	}
+
+	OptionsDetailsListEntryInfo->UpdateDetailsViewInfo(CastChecked<UListDataObjectBase>(SelectedItem), TryGetEntryWidgetClassName(SelectedItem));
+
 }
 
-void UOptionsScreenWidget::OnListViewItemHovered(UObject* HoveredListItem, bool WasHovered)
+void UOptionsScreenWidget::OnListViewItemHovered(UObject* HoveredListItem, bool bWasHovered)
 {
 	if (!HoveredListItem)
 	{
@@ -71,11 +75,24 @@ void UOptionsScreenWidget::OnListViewItemHovered(UObject* HoveredListItem, bool 
 
 	check(HoveredEnryWidget);
 
-	HoveredEnryWidget->NativeOnListEntryWidgetHovered(WasHovered);
+	HoveredEnryWidget->NativeOnListEntryWidgetHovered(bWasHovered);
+
+	if (bWasHovered)
+	{
+		OptionsDetailsListEntryInfo->UpdateDetailsViewInfo(CastChecked<UListDataObjectBase>(HoveredListItem), TryGetEntryWidgetClassName(HoveredListItem));
+	}
+	else
+	{
+		if (UListDataObjectBase* SelectedItemData = OptionsCommonListView->GetSelectedItem<UListDataObjectBase>())
+		{
+			OptionsDetailsListEntryInfo->UpdateDetailsViewInfo(SelectedItemData,TryGetEntryWidgetClassName(SelectedItemData));
+		}
+	}
 }
 
 void UOptionsScreenWidget::OnOptionsTabSelected(FName TabID)
 {
+	OptionsDetailsListEntryInfo->ClearDetailsViewInfo();
 	TArray<UListDataObjectBase*> FoundListOfTabItems = GetOrCreateDataRegistry()->GetListSourceItemsBySelectedTabID(TabID);
 
 	OptionsCommonListView->SetListItems(FoundListOfTabItems);
@@ -122,4 +139,14 @@ void UOptionsScreenWidget::NativeOnActivated()
 		OptionsTabListWidget->RequestRegisterTab(TabID, TabCollection->GetDataDisplayName());
 
 	}
+}
+
+FString UOptionsScreenWidget::TryGetEntryWidgetClassName(UObject* OwningListItem) const
+{
+	if (UUserWidget* FoundEntryWidget = OptionsCommonListView->GetEntryWidgetFromItem(OwningListItem))
+	{
+		return FoundEntryWidget->GetClass()->GetName();
+	}
+
+	return TEXT("Entry widget is not valid");
 }

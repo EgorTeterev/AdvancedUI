@@ -6,6 +6,7 @@
 #include "Widgets/AdvancedActivatableWidget.h"
 #include "OptionsScreenWidget.generated.h"
 
+class UOptionsDetailsView;
 class UAdvancedCommonListView;
 class UOptionsDataRegistry;
 class UAdvancedTabListWidgetBase;
@@ -27,7 +28,9 @@ private:
 	void OnResetBoundActionTriggered();
 	void OnBackActionTriggered();
 	void OnListViewItemSelected(UObject* SelectedItem);
-	void OnListViewItemHovered(UObject* HoveredListItem, bool WasHovered);
+	void OnListViewItemHovered(UObject* HoveredListItem, bool bWasHovered);
+	
+	FString TryGetEntryWidgetClassName(UObject* OwningListItem) const;
 
 	UFUNCTION()
 	void OnOptionsTabSelected(FName TabID);
@@ -39,10 +42,12 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UAdvancedCommonListView* OptionsCommonListView;
 
+	UPROPERTY(meta = (BindWidget))
+	UOptionsDetailsView* OptionsDetailsListEntryInfo;
+
 	//Through this pointer is handled the creation of data in option screen
 	UPROPERTY(Transient)
 	UOptionsDataRegistry* CreatedOwningDataRegistery;
-
 
 	UPROPERTY(EditDefaultsOnly, Category = "Frontend Options Screen", meta = (RowType = "/Script/CommonUI.CommonInputActionDataBase"))
 	FDataTableRowHandle ResetAction;

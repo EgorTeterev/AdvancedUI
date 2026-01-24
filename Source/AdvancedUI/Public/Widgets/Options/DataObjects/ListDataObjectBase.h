@@ -20,6 +20,7 @@ class ADVANCEDUI_API UListDataObjectBase : public UObject
 	GENERATED_BODY()
 	
 public:
+	void InitDataObject();
 	DECLARE_MULTICAST_DELEGATE_TwoParams(FOnListDataModifiedDelegate, UListDataObjectBase*, EOptionsListDataModifyReason);
 	FOnListDataModifiedDelegate OnListDataModified;
 
@@ -30,7 +31,9 @@ public:
 	LIST_DATA_ACCESSORS(TSoftObjectPtr<UTexture2D>, SoftDescriprionImage);
 	LIST_DATA_ACCESSORS(UListDataObjectBase*, ParentData);
 
-	void InitDataObject();
+	virtual bool HasDefaultValue() const { return false; };
+	virtual bool CanResetBackToDefaultValue() const { return false; };
+	virtual bool TryResetBackToDefaultValue() const { return false; };
 
 	virtual TArray<UListDataObjectBase*> GetAllChildListData() const { return TArray<UListDataObjectBase*>(); };
 	virtual bool HasAnyChildListData() const { return false; };
