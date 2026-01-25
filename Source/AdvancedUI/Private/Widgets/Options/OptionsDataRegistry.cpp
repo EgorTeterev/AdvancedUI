@@ -5,6 +5,8 @@
 #include "Widgets/Options/DataObjects/ListDataObject_String.h"
 #include "Widgets/Options/DataObjects/ListDataObjectCollection.h"
 #include "Widgets/Options/OptionsDataInteractionHelper.h"
+#include "FrontendFunctionLibrary.h"
+#include "Tags/UIGameplayTags.h"
 #include "Settings/AdvancedGameUserSettings.h"
 
 
@@ -60,14 +62,14 @@ void UOptionsDataRegistry::InitGameplayTab()
 		NewGameplayOptionsCollection->AddChildList(GameDifficulty);
 	}
 
-	//Really long
+	//Test long option
 	{
-		UListDataObject_String* test = NewObject<UListDataObject_String>();
+		UListDataObject_String* TestImage = NewObject<UListDataObject_String>();
 
-		test->SetDataID(FName("Really long name test"));
-		test->SetDataDisplayName(FText::FromString(TEXT("Really long name of option in list to check widget")));
-
-		NewGameplayOptionsCollection->AddChildList(test);
+		TestImage->SetDataID(FName("Really long name test"));
+		TestImage->SetDataDisplayName(FText::FromString(TEXT("Really long name of option in list to check widget")));
+		TestImage->SetSoftDescriprionImage(UFrontendFunctionLibrary::GetOptionsSoftImageByTag(UIGameplayTags::UI_Image_TestImage));
+		NewGameplayOptionsCollection->AddChildList(TestImage);
 	}
 
 	RegisteredOptionsTabCollections.Add(NewGameplayOptionsCollection);

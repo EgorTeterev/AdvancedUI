@@ -19,4 +19,6 @@ public:
 	UPROPERTY(Config,EditAnywhere,Category = "Widget soft pointer", meta = (ForceInlineRow,Categories = "UI.Widget"))
 	TMap<FGameplayTag, TSoftClassPtr<UAdvancedActivatableWidget>> SoftWidgetsMap;
 	
+	UPROPERTY(Config, EditAnywhere, Category = "Option image soft pointer", meta = (ForceInlineRow, Categories = "UI.Image"))
+	TMap<FGameplayTag, TSoftObjectPtr<UTexture2D>> OptionsSoftImagesMap;
 };

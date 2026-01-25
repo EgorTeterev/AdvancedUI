@@ -29,6 +29,7 @@ protected:
 	UWidget* BP_GetWidgetToFocusForGamepad() const;
 
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
+	virtual void NativeOnEntryReleased() override;
 	virtual FReply NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent) override;
 	//The child widget class can override this function to handle initialization.
 	virtual void OnOwningListDataObjectSet(UListDataObjectBase* OwningListDataObject);

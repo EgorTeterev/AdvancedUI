@@ -21,7 +21,7 @@ class ADVANCEDUI_API UOptionsScreenWidget : public UAdvancedActivatableWidget
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeOnActivated() override;
-
+	virtual UWidget* NativeGetDesiredFocusTarget() const override;
 	virtual void NativeOnDeactivated() override;
 private:
 
@@ -31,7 +31,8 @@ private:
 	void OnBackActionTriggered();
 	void OnListViewItemSelected(UObject* SelectedItem);
 	void OnListViewItemHovered(UObject* HoveredListItem, bool bWasHovered);
-	
+
+
 	FString TryGetEntryWidgetClassName(UObject* OwningListItem) const;
 
 	void OnListViewListDataModified(UListDataObjectBase* ModifiedData, EOptionsListDataModifyReason ModifyReason);

@@ -260,3 +260,20 @@ void UOptionsScreenWidget::OnListViewListDataModified(UListDataObjectBase* Modif
 		RemoveActionBinding(ResetActionHandle);
 	}
 }
+
+UWidget* UOptionsScreenWidget::NativeGetDesiredFocusTarget() const
+{
+	UObject* SelectedObject = OptionsCommonListView->GetSelectedItem();
+	
+	if (SelectedObject)
+	{
+		UUserWidget* SelectedEntryWidget = OptionsCommonListView->GetEntryWidgetFromItem(SelectedObject);
+		
+		if (SelectedEntryWidget)
+		{
+			return SelectedEntryWidget;
+		}
+	}
+
+	return Super::NativeGetDesiredFocusTarget();
+}

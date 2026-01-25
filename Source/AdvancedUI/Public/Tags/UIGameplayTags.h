@@ -18,5 +18,7 @@ namespace UIGameplayTags
 	ADVANCEDUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(UI_Widget_ConfirmScreen);
 	ADVANCEDUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(UI_Widget_OptionsScreen);
 
+	//Options soft images
+	ADVANCEDUI_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(UI_Image_TestImage);
 
 }

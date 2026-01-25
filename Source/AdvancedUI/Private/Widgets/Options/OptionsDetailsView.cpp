@@ -21,6 +21,10 @@ void UOptionsDetailsView::UpdateDetailsViewInfo(UListDataObjectBase* DataObject,
 		DescriptionImage->SetBrushFromLazyTexture(DataObject->GetSoftDescriprionImage());
 		DescriptionImage->SetVisibility(ESlateVisibility::HitTestInvisible);
 	}
+	else
+	{
+		DescriptionImage->SetVisibility(ESlateVisibility::Collapsed);
+	}
 
 	Description->SetText(DataObject->GetDescriptionRichText());
 

@@ -17,4 +17,7 @@ namespace UIGameplayTags
 	ADVANCEDUI_API UE_DEFINE_GAMEPLAY_TAG(UI_Widget_ConfirmScreen, "UI.Widget.ConfirmScreen");
 	ADVANCEDUI_API UE_DEFINE_GAMEPLAY_TAG(UI_Widget_OptionsScreen, "UI.Widget.OptionsScreen");
 
+	//Options soft images
+	ADVANCEDUI_API UE_DEFINE_GAMEPLAY_TAG(UI_Image_TestImage, "UI.Image.TestImage");
+
 }

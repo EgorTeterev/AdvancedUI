@@ -63,3 +63,10 @@ void UListEntryBase::SelectThisEntryWidget()
 {
 	CastChecked<UListView>(GetOwningListView())->SetSelectedItem(GetListItem());
 }
+
+void UListEntryBase::NativeOnEntryReleased()
+{
+	IUserObjectListEntry::NativeOnEntryReleased();
+
+	NativeOnListEntryWidgetHovered(false);
+}
