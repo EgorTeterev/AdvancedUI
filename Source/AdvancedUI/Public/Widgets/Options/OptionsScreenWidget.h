@@ -4,12 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Widgets/AdvancedActivatableWidget.h"
+#include "Types/AdvancedUIEnumTypes.h"
 #include "OptionsScreenWidget.generated.h"
 
 class UOptionsDetailsView;
 class UAdvancedCommonListView;
 class UOptionsDataRegistry;
 class UAdvancedTabListWidgetBase;
+class UListDataObjectBase;
 
 UCLASS(Abstract, BlueprintType, meta = (DisableNaiveTick))
 class ADVANCEDUI_API UOptionsScreenWidget : public UAdvancedActivatableWidget
@@ -32,6 +34,8 @@ private:
 	
 	FString TryGetEntryWidgetClassName(UObject* OwningListItem) const;
 
+	void OnListViewListDataModified(UListDataObjectBase* ModifiedData, EOptionsListDataModifyReason ModifyReason);
+
 	UFUNCTION()
 	void OnOptionsTabSelected(FName TabID);
 
@@ -52,8 +56,12 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Frontend Options Screen", meta = (RowType = "/Script/CommonUI.CommonInputActionDataBase"))
 	FDataTableRowHandle ResetAction;
 
+	UPROPERTY(Transient)
+	TArray<UListDataObjectBase*> ResettableSettingsArray;
+	bool bIsResettingData = false;
+
 	FUIActionBindingHandle ResetActionHandle;
 
-
+	
 	
 };

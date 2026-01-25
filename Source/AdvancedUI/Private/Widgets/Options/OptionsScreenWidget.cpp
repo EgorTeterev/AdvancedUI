@@ -11,6 +11,7 @@
 #include "Settings/AdvancedGameUserSettings.h"
 #include "Widgets/Options/ListEntries/ListEntryBase.h"
 #include "Widgets/Options/OptionsDetailsView.h"
+#include "Subsystems/UISubsystem.h"
 #include "DebugHelper.h"
 
 void UOptionsScreenWidget::NativeOnInitialized()
@@ -45,7 +46,55 @@ void UOptionsScreenWidget::NativeOnDeactivated()
 
 void UOptionsScreenWidget::OnResetBoundActionTriggered()
 {
-	AUIDebug::ConsoleMessage(TEXT("Reset"));
+	if (ResettableSettingsArray.IsEmpty())
+	{
+		return;
+	}
+
+	UCommonButtonBase* SelectedButton = OptionsTabListWidget->GetTabButtonBaseByID(OptionsTabListWidget->GetActiveTab());
+
+	const FString SelectedTabButtonName = CastChecked<UFrontendCommonButtonBase>(SelectedButton)->GetButtonDisplayText().ToString();
+
+	//TFunction<void(EConfirmScreenButtonType)> ButtonCallback
+	UUISubsystem::Get(this)->PushConfirmScreenToModalStackAsync(
+		EConfirmScreenType::YesOrNo,
+		FText::FromString(TEXT("Reset")),
+		FText::FromString(TEXT("Are you sure you want to reset all the settings under the ")+SelectedTabButtonName +TEXT(" tab.")),
+		[this](EConfirmScreenButtonType ClickedButtonType) 
+		{
+			if (ClickedButtonType != EConfirmScreenButtonType::Confirmed)
+			{
+				return;
+			}
+
+			bIsResettingData = true;
+			bool bFailedToResetData = false;
+
+			for (UListDataObjectBase* OptionToReset : ResettableSettingsArray)
+			{
+				if (!OptionToReset)
+				{
+					continue;
+				}
+
+				if (OptionToReset->TryResetBackToDefaultValue())
+				{
+
+				}
+				else
+				{
+					bFailedToResetData = true;
+				}
+			}
+
+			bIsResettingData = false;
+
+			if (!bFailedToResetData)
+			{
+				ResettableSettingsArray.Empty();
+				RemoveActionBinding(ResetActionHandle);
+			}
+		});
 }
 
 void UOptionsScreenWidget::OnBackActionTriggered()
@@ -104,6 +153,36 @@ void UOptionsScreenWidget::OnOptionsTabSelected(FName TabID)
 		OptionsCommonListView->SetSelectedIndex(0);
 	}
 
+	ResettableSettingsArray.Empty();
+
+	for (UListDataObjectBase* ListItem : FoundListOfTabItems)
+	{
+		if (!ListItem)
+		{
+			continue;
+		}
+
+		if (!ListItem->OnListDataModified.IsBoundToObject(this))
+		{
+			ListItem->OnListDataModified.AddUObject(this, &ThisClass::OnListViewListDataModified);
+		}
+
+		if (ListItem->CanResetBackToDefaultValue())
+		{
+			ResettableSettingsArray.AddUnique(ListItem);
+		}
+	}
+	if (ResettableSettingsArray.IsEmpty())
+	{
+		RemoveActionBinding(ResetActionHandle);
+	} 
+	else
+	{
+		if (!GetActionBindings().Contains(ResetActionHandle))
+		{
+			AddActionBinding(ResetActionHandle);
+		}
+	}
 }
 
 UOptionsDataRegistry* UOptionsScreenWidget::GetOrCreateDataRegistry()
@@ -149,4 +228,35 @@ FString UOptionsScreenWidget::TryGetEntryWidgetClassName(UObject* OwningListItem
 	}
 
 	return TEXT("Entry widget is not valid");
+}
+
+void UOptionsScreenWidget::OnListViewListDataModified(UListDataObjectBase* ModifiedData, EOptionsListDataModifyReason ModifyReason)
+{
+
+	if (!ModifiedData || bIsResettingData)
+	{
+		return;
+	}
+
+	if (ModifiedData->CanResetBackToDefaultValue())
+	{
+		ResettableSettingsArray.AddUnique(ModifiedData);
+
+		if (!GetActionBindings().Contains(ResetActionHandle))
+		{
+			AddActionBinding(ResetActionHandle);
+		}
+	}
+	else
+	{
+		if (ResettableSettingsArray.Contains(ModifiedData))
+		{
+			ResettableSettingsArray.Remove(ModifiedData);
+		}
+	}
+
+	if (ResettableSettingsArray.IsEmpty())
+	{
+		RemoveActionBinding(ResetActionHandle);
+	}
 }

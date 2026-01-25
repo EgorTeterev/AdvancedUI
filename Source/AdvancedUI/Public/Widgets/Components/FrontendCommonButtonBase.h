@@ -19,6 +19,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void SetButtonText(FText Text);
 
+	UFUNCTION(BlueprintCallable)
+	FText GetButtonDisplayText() const;
+
 private:
 	UPROPERTY(meta=(BindWidgetOptional))
 	UCommonTextBlock* CommonTextBlock_Button;

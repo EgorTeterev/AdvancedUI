@@ -22,10 +22,14 @@ public:
 	FORCEINLINE const TArray<FText>& GetOptionsTextArray() const { return AvailableOptionsTextArray; };
 	FORCEINLINE const FText GetCurrentDisplayText() const { return CurrentDisplayText; };
 
+
+
 protected:
 	virtual void OnDataObjectInitialized() override;
 	bool TrySetDisplayTextFromStringValue(const FString& String);
 
+	virtual bool CanResetBackToDefaultValue() const override;
+	virtual bool TryResetBackToDefaultValue() override;
 
 	TArray<FString> AvailableOptionsStringArray;
 	TArray<FText> AvailableOptionsTextArray;

@@ -33,7 +33,7 @@ public:
 
 	virtual bool HasDefaultValue() const { return false; };
 	virtual bool CanResetBackToDefaultValue() const { return false; };
-	virtual bool TryResetBackToDefaultValue() const { return false; };
+	virtual bool TryResetBackToDefaultValue() { return false; };
 
 	virtual TArray<UListDataObjectBase*> GetAllChildListData() const { return TArray<UListDataObjectBase*>(); };
 	virtual bool HasAnyChildListData() const { return false; };
