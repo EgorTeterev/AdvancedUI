@@ -24,8 +24,12 @@ public:
 	void NativeOnListEntryWidgetHovered(bool bWasHovered);
 
 protected:
+	//Child widget blueprint should override this function for the gamepad interaction
+	UFUNCTION(BlueprintImplementableEvent,meta = (DisplayName = "Get Widget To Focus For Gamepad"))
+	UWidget* BP_GetWidgetToFocusForGamepad() const;
+
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
-	
+	virtual FReply NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent) override;
 	//The child widget class can override this function to handle initialization.
 	virtual void OnOwningListDataObjectSet(UListDataObjectBase* OwningListDataObject);
 

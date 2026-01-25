@@ -27,6 +27,7 @@ protected:
 private:
 	void OnPreviousOptionButtonClicked();
 	void OnNextOptionButtonClicked();
+	void OnRotatorValueChanged(int32 Value, bool bUserInitiated);
 
 	UPROPERTY(BlueprintReadOnly,meta = (BindWidget,AllowPrivateAccess = "true"))
 	UFrontendCommonButtonBase* PreviousOptionCommonButton;
@@ -39,4 +40,6 @@ private:
 
 	UPROPERTY(Transient)
 	UListDataObject_String* CachedDataObject;
+
+
 };
