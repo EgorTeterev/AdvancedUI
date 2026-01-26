@@ -17,7 +17,7 @@ class ADVANCEDUI_API UAdvancedCommonListView : public UCommonListView
 	
 protected:
 	virtual UUserWidget& OnGenerateEntryWidgetInternal(UObject* Item, TSubclassOf<UUserWidget> DesiredEntryClass, const TSharedRef<STableViewBase>& OwnerTable) override;
-
+	virtual bool OnIsSelectableOrNavigableInternal(UObject* FirstSelectedItem) override;
 
 private:
 

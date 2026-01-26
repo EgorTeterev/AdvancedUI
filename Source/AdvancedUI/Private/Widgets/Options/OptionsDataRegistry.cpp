@@ -34,7 +34,23 @@ TArray<UListDataObjectBase*> UOptionsDataRegistry::GetListSourceItemsBySelectedT
 
 	UListDataObjectCollection* FoundTabCollection = *FoundTabCollectionPtr;
 
-	return FoundTabCollection->GetAllChildListData();
+	TArray<UListDataObjectBase*> AllChildListItems;
+
+	for (UListDataObjectBase* ChildListData : FoundTabCollection->GetAllChildListData())
+	{
+		if (!ChildListData)
+		{
+			continue;
+		}
+		AllChildListItems.Add(ChildListData);
+
+		if (ChildListData->HasAnyChildListData())
+		{
+			FindChildListDataRecursively(ChildListData, AllChildListItems);
+		}
+	}
+
+	return AllChildListItems;
 }
 
 void UOptionsDataRegistry::InitGameplayTab()
@@ -81,6 +97,32 @@ void UOptionsDataRegistry::InitAudioTab()
 	NewAudioOptionsCollection->SetDataID(FName("AudioOptionsCollection"));
 	NewAudioOptionsCollection->SetDataDisplayName(FText::FromString(TEXT("Audio")));
 
+	//VolumeCategory
+	{
+		UListDataObjectCollection* VolumeCategoryCollection = NewObject<UListDataObjectCollection>();
+		VolumeCategoryCollection->SetDataID(FName("VolumeCategory"));
+		VolumeCategoryCollection->SetDataDisplayName(FText::FromString(TEXT("Volume")));
+
+		NewAudioOptionsCollection->AddChildList(VolumeCategoryCollection);
+
+		{
+			UListDataObject_String* TestCategoryChild = NewObject<UListDataObject_String>();
+
+			TestCategoryChild->SetDataID(FName("TestCategoryChild"));
+			TestCategoryChild->SetDataDisplayName(FText::FromString(TEXT("TestCategoryChild")));
+			VolumeCategoryCollection->AddChildList(TestCategoryChild);
+		}
+
+		{
+			UListDataObject_String* SecondCategoryChild = NewObject<UListDataObject_String>();
+
+			SecondCategoryChild->SetDataID(FName("SecondCategoryChild"));
+			SecondCategoryChild->SetDataDisplayName(FText::FromString(TEXT("SecondCategoryChild")));
+			VolumeCategoryCollection->AddChildList(SecondCategoryChild);
+		}
+
+	}
+
 	RegisteredOptionsTabCollections.Add(NewAudioOptionsCollection);
 
 }
@@ -101,4 +143,27 @@ void UOptionsDataRegistry::InitControlTab()
 	NewControlOptionsCollection->SetDataDisplayName(FText::FromString(TEXT("Control")));
 
 	RegisteredOptionsTabCollections.Add(NewControlOptionsCollection);
+}
+
+void UOptionsDataRegistry::FindChildListDataRecursively(UListDataObjectBase* ObjectToSearch, TArray<UListDataObjectBase*>& OutFoundChilds) const
+{
+	if (!ObjectToSearch || !ObjectToSearch->HasAnyChildListData())
+	{
+		return;
+	}
+
+	for (UListDataObjectBase* SubChildData : ObjectToSearch->GetAllChildListData())
+	{
+		if (!SubChildData)
+		{
+			continue;
+		}
+
+		OutFoundChilds.Add(SubChildData);
+
+		if (SubChildData->HasAnyChildListData())
+		{
+			FindChildListDataRecursively(SubChildData, OutFoundChilds);
+		}
+	}
 }

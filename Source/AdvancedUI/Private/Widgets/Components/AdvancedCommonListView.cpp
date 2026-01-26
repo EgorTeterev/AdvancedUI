@@ -5,6 +5,7 @@
 #include "Widgets/Options/DataAssets/DA_DataListEntryMapping.h"
 #include "Widgets/Options/ListEntries/ListEntryBase.h"
 #include "Widgets/Options/DataObjects/ListDataObjectBase.h"
+#include "Widgets/Options/DataObjects/ListDataObjectCollection.h"
 #include "Editor/WidgetCompilerLog.h"
 
 
@@ -26,7 +27,10 @@ UUserWidget& UAdvancedCommonListView::OnGenerateEntryWidgetInternal(UObject* Ite
 	}
 }
 
-
+bool UAdvancedCommonListView::OnIsSelectableOrNavigableInternal(UObject* FirstSelectedItem)
+{
+	return !FirstSelectedItem->IsA<UListDataObjectCollection>();
+}
 
 #if WITH_EDITOR
 void UAdvancedCommonListView::ValidateCompiledDefaults(class IWidgetCompilerLog& CompileLog) const

@@ -4,40 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "Widgets/Options/ListEntries/ListEntryBase.h"
-#include "ListEntryString.generated.h"
+#include "ListEntryScalar.generated.h"
 
-class UFrontendCommonButtonBase;
-class UAdvancedCommonRotator;
-class UListDataObject_String;
+class UCommonNumericTextBlock;
+class UAnalogSlider;
 /**
  * 
  */
 UCLASS(Abstract, BlueprintType, meta = (DisableNaiveTick))
-class ADVANCEDUI_API UListEntryString : public UListEntryBase
+class ADVANCEDUI_API UListEntryScalar : public UListEntryBase
 {
 	GENERATED_BODY()
-
+	
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void OnOwningListDataObjectSet(UListDataObjectBase* OwningListDataObject) override;
 	virtual void OnOwningListDataObjectModified(UListDataObjectBase* OwningModifiedData, EOptionsListDataModifyReason ModifyReason) override;
 
 private:
-	void OnPreviousOptionButtonClicked();
-	void OnNextOptionButtonClicked();
-	void OnRotatorValueChanged(int32 Value, bool bUserInitiated);
-
 	UPROPERTY(BlueprintReadOnly,meta = (BindWidget,AllowPrivateAccess = "true"))
-	UFrontendCommonButtonBase* PreviousOptionCommonButton;
+	UCommonNumericTextBlock* CommonNumericSettingValue;
 
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess = "true"))
-	UAdvancedCommonRotator* OptionCommonRotator;
-
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess = "true"))
-	UFrontendCommonButtonBase* NextOptionCommonButton;
-
-	UPROPERTY(Transient)
-	UListDataObject_String* CachedDataObject;
-
+	UAnalogSlider* SettingSlider;
 
 };
