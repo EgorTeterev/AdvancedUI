@@ -3,6 +3,11 @@
 
 #include "Settings/AdvancedGameUserSettings.h"
 
+UAdvancedGameUserSettings::UAdvancedGameUserSettings()
+	:OverallVolume (1.0f)
+{
+}
+
 UAdvancedGameUserSettings* UAdvancedGameUserSettings::UAdvancedGameUserSettings::Get()
 {
 	if (GEngine)
@@ -11,4 +16,11 @@ UAdvancedGameUserSettings* UAdvancedGameUserSettings::UAdvancedGameUserSettings:
 	}
 	
 	return nullptr;
+}
+
+void UAdvancedGameUserSettings::SetOverallVolume(float NewOverallVolume)
+{
+	OverallVolume = NewOverallVolume;
+	
+	//handle volume changing
 }

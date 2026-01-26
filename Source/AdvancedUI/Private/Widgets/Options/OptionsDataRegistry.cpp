@@ -7,6 +7,7 @@
 #include "Widgets/Options/OptionsDataInteractionHelper.h"
 #include "FrontendFunctionLibrary.h"
 #include "Tags/UIGameplayTags.h"
+#include "Widgets/Options/DataObjects/ListDataObject_Scalar.h"
 #include "Settings/AdvancedGameUserSettings.h"
 
 
@@ -105,22 +106,24 @@ void UOptionsDataRegistry::InitAudioTab()
 
 		NewAudioOptionsCollection->AddChildList(VolumeCategoryCollection);
 
+		//Overall Volume
 		{
-			UListDataObject_String* TestCategoryChild = NewObject<UListDataObject_String>();
+			UListDataObject_Scalar* OverallVolume = NewObject<UListDataObject_Scalar>();
+			OverallVolume->SetDataID(FName("OverallVolume"));
+			OverallVolume->SetDataDisplayName(FText::FromString(TEXT("Overall Volume")));
+			OverallVolume->SetDescriptionRichText(FText::FromString(TEXT("All volume")));
+			OverallVolume->SetDisplayValueRange(TRange<float>(0.f,1.f));
+			OverallVolume->SetOutputValueRange(TRange<float>(0.f,2.f));
+			OverallVolume->SetSliderStep(0.1f);
+			OverallVolume->SetDefaultValueFromString(LexToString(1.f));
+			OverallVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
+			OverallVolume->SetNumberFormattingOptions(UListDataObject_Scalar::NoDecimal());
+			OverallVolume->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetOverallVolume));
+			OverallVolume->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetOverallVolume));
+			OverallVolume->SetShouldApplyChangeSettingsImmediatly(true);
 
-			TestCategoryChild->SetDataID(FName("TestCategoryChild"));
-			TestCategoryChild->SetDataDisplayName(FText::FromString(TEXT("TestCategoryChild")));
-			VolumeCategoryCollection->AddChildList(TestCategoryChild);
+			NewAudioOptionsCollection->AddChildList(OverallVolume);
 		}
-
-		{
-			UListDataObject_String* SecondCategoryChild = NewObject<UListDataObject_String>();
-
-			SecondCategoryChild->SetDataID(FName("SecondCategoryChild"));
-			SecondCategoryChild->SetDataDisplayName(FText::FromString(TEXT("SecondCategoryChild")));
-			VolumeCategoryCollection->AddChildList(SecondCategoryChild);
-		}
-
 	}
 
 	RegisteredOptionsTabCollections.Add(NewAudioOptionsCollection);

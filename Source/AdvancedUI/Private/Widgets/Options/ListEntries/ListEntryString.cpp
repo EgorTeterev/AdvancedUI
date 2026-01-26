@@ -23,12 +23,12 @@ void UListEntryString::OnOwningListDataObjectSet(UListDataObjectBase* OwningList
 {
 	Super::OnOwningListDataObjectSet(OwningListDataObject);
 
-	CachedDataObject = CastChecked<UListDataObject_String>(OwningListDataObject);
+	CachedStringDataObject = CastChecked<UListDataObject_String>(OwningListDataObject);
 
-	if (CachedDataObject)
+	if (CachedStringDataObject)
 	{
-		OptionCommonRotator->PopulateTextLabels(CachedDataObject->GetOptionsTextArray());
-		OptionCommonRotator->SetSelectedOptionByText(CachedDataObject->GetCurrentDisplayText());
+		OptionCommonRotator->PopulateTextLabels(CachedStringDataObject->GetOptionsTextArray());
+		OptionCommonRotator->SetSelectedOptionByText(CachedStringDataObject->GetCurrentDisplayText());
 	}
 
 }
@@ -36,18 +36,18 @@ void UListEntryString::OnOwningListDataObjectSet(UListDataObjectBase* OwningList
 
 void UListEntryString::OnOwningListDataObjectModified(UListDataObjectBase* OwningModifiedData, EOptionsListDataModifyReason ModifyReason)
 {
-	if (CachedDataObject)
+	if (CachedStringDataObject)
 	{
-		OptionCommonRotator->SetSelectedOptionByText(CachedDataObject->GetCurrentDisplayText());
+		OptionCommonRotator->SetSelectedOptionByText(CachedStringDataObject->GetCurrentDisplayText());
 	}
 }
 
 
 void UListEntryString::OnPreviousOptionButtonClicked()
 {
-	if (CachedDataObject)
+	if (CachedStringDataObject)
 	{
-		CachedDataObject->SwitchToNextOption();
+		CachedStringDataObject->SwitchToNextOption();
 	}
 
 	SelectThisEntryWidget();
@@ -55,9 +55,9 @@ void UListEntryString::OnPreviousOptionButtonClicked()
 
 void UListEntryString::OnNextOptionButtonClicked()
 {
-	if (CachedDataObject)
+	if (CachedStringDataObject)
 	{
-		CachedDataObject->SwitchToPreviousOption();
+		CachedStringDataObject->SwitchToPreviousOption();
 	}
 
 	SelectThisEntryWidget();
@@ -65,7 +65,7 @@ void UListEntryString::OnNextOptionButtonClicked()
 
 void UListEntryString::OnRotatorValueChanged(int32 Value, bool bUserInitiated)
 {
-	if (CachedDataObject)
+	if (CachedStringDataObject)
 	{
 		UCommonInputSubsystem* CommonInputSubsystem = GetInputSubsystem();
 
@@ -73,7 +73,7 @@ void UListEntryString::OnRotatorValueChanged(int32 Value, bool bUserInitiated)
 		{
 			if (CommonInputSubsystem->GetCurrentInputType() == ECommonInputType::Gamepad)
 			{
-				CachedDataObject->OnRotatorInitiatedChange(OptionCommonRotator->GetSelectedText());
+				CachedStringDataObject->OnRotatorInitiatedChange(OptionCommonRotator->GetSelectedText());
 			}
 		}
 	}

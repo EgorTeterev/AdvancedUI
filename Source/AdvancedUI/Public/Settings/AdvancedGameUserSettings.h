@@ -15,6 +15,8 @@ class ADVANCEDUI_API UAdvancedGameUserSettings : public UGameUserSettings
 	GENERATED_BODY()
 
 public:
+	UAdvancedGameUserSettings();
+
 	static UAdvancedGameUserSettings* Get();
 	
 	UFUNCTION()
@@ -23,7 +25,19 @@ public:
 	UFUNCTION()
 	void SetCurrentGameDifficulty(const FString& NewDifficulty) { CurrentGameDifficulty = NewDifficulty; };
 
+	UFUNCTION()
+	float GetOverallVolume() const { return OverallVolume; };
+
+	UFUNCTION()
+	void SetOverallVolume(float NewOverallVolume);
+
 private:
+	//Game collection tab
 	UPROPERTY(Config)
 	FString CurrentGameDifficulty;
+	
+	//Audio collection tab
+	UPROPERTY(Config)
+	float OverallVolume;
+
 };

@@ -37,7 +37,7 @@ private:
 	UFrontendCommonButtonBase* NextOptionCommonButton;
 
 	UPROPERTY(Transient)
-	UListDataObject_String* CachedDataObject;
+	UListDataObject_String* CachedStringDataObject;
 
 
 };
