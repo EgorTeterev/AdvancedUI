@@ -114,7 +114,7 @@ void UOptionsDataRegistry::InitAudioTab()
 			OverallVolume->SetDescriptionRichText(FText::FromString(TEXT("All volume")));
 			OverallVolume->SetDisplayValueRange(TRange<float>(0.f,1.f));
 			OverallVolume->SetOutputValueRange(TRange<float>(0.f,2.f));
-			OverallVolume->SetSliderStep(0.1f);
+			OverallVolume->SetSliderStep(0.01f);
 			OverallVolume->SetDefaultValueFromString(LexToString(1.f));
 			OverallVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
 			OverallVolume->SetNumberFormattingOptions(UListDataObject_Scalar::NoDecimal());
@@ -122,7 +122,26 @@ void UOptionsDataRegistry::InitAudioTab()
 			OverallVolume->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetOverallVolume));
 			OverallVolume->SetShouldApplyChangeSettingsImmediatly(true);
 
-			NewAudioOptionsCollection->AddChildList(OverallVolume);
+			VolumeCategoryCollection->AddChildList(OverallVolume);
+		}
+
+		//Music Volume
+		{
+			UListDataObject_Scalar* MusicVolume = NewObject<UListDataObject_Scalar>();
+			MusicVolume->SetDataID(FName("MusicVolume"));
+			MusicVolume->SetDataDisplayName(FText::FromString(TEXT("Music Volume")));
+			MusicVolume->SetDescriptionRichText(FText::FromString(TEXT("Music")));
+			MusicVolume->SetDisplayValueRange(TRange<float>(0.f, 1.f));
+			MusicVolume->SetOutputValueRange(TRange<float>(0.f, 2.f));
+			MusicVolume->SetSliderStep(0.01f);
+			MusicVolume->SetDefaultValueFromString(LexToString(1.f));
+			MusicVolume->SetDisplayNumericType(ECommonNumericType::Percentage);
+			MusicVolume->SetNumberFormattingOptions(UListDataObject_Scalar::NoDecimal());
+			MusicVolume->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetMusicVolume));
+			MusicVolume->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetMusicVolume));
+			MusicVolume->SetShouldApplyChangeSettingsImmediatly(true);
+
+			VolumeCategoryCollection->AddChildList(MusicVolume);
 		}
 	}
 

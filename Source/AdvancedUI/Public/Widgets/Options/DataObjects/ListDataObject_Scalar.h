@@ -22,9 +22,15 @@ public:
 	LIST_DATA_ACCESSORS(float, SliderStep); 
 	static FCommonNumberFormattingOptions NoDecimal();
 	static FCommonNumberFormattingOptions WithDecimal(int32 NumFracDigit);
+	
 	float GetCurrentValue() const;
+	void SetCurrentValueFromSlider(float NewValue);
+
 
 private:
+	virtual bool CanResetBackToDefaultValue() const override;
+	virtual bool TryResetBackToDefaultValue() override;
+
 	float StringToFloat(const FString& String) const;
 	TRange<float> DisplayValueRange = TRange<float>(0.f,1.f);
 	TRange<float> OutputValueRange = TRange<float>(0.f, 1.f);

@@ -32,9 +32,54 @@ float UListDataObject_Scalar::GetCurrentValue() const
     return 0.0f;
 }
 
+void UListDataObject_Scalar::SetCurrentValueFromSlider(float NewValue)
+{
+    if (DataDynamicSetter)
+    {
+        const float ClampedValue = FMath::GetMappedRangeValueClamped(
+            DisplayValueRange,
+            OutputValueRange,
+            NewValue
+        );
+
+        DataDynamicSetter->SetValueFromString(LexToSanitizedString(ClampedValue));
+
+        NotifyListDataModified(this);
+    }
+}
+
 float UListDataObject_Scalar::StringToFloat(const FString& String) const
 {
     float OutValue = 0.0f;
     LexFromString(OutValue, *String);
     return OutValue;
+}
+bool UListDataObject_Scalar::CanResetBackToDefaultValue() const
+{
+    if (HasDefaultValue())
+    {
+       const float DefaultValue = StringToFloat(GetDefaultValueAsString());
+       const float CurrentValue = StringToFloat(DataDynamicGetter->GetValueAsString());
+
+       return !FMath::IsNearlyEqual(DefaultValue, CurrentValue, 0.01f);
+    }
+
+    return false;
+}
+
+bool UListDataObject_Scalar::TryResetBackToDefaultValue()
+{
+    if (CanResetBackToDefaultValue())
+    {
+        if (DataDynamicSetter)
+        {
+            DataDynamicSetter->SetValueFromString(GetDefaultValueAsString());
+
+            NotifyListDataModified(this,EOptionsListDataModifyReason::ResetToDefault);
+
+            return true;
+        }
+    }
+
+    return false;
 }

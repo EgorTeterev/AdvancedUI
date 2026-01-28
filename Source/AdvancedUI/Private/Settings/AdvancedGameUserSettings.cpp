@@ -22,5 +22,12 @@ void UAdvancedGameUserSettings::SetOverallVolume(float NewOverallVolume)
 {
 	OverallVolume = NewOverallVolume;
 	
-	//handle volume changing
+	//Handle volume changing
+}
+
+void UAdvancedGameUserSettings::SetMusicVolume(float NewMusicVolume)
+{
+	MusicVolume = NewMusicVolume;
+
+	//Handle music volume changing
 }
