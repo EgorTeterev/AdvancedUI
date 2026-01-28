@@ -5,6 +5,8 @@
 
 UAdvancedGameUserSettings::UAdvancedGameUserSettings()
 	:OverallVolume (1.0f)
+	,MusicVolume(1.0f)
+	,SoundFXVolume (1.0f)
 {
 }
 
@@ -30,4 +32,12 @@ void UAdvancedGameUserSettings::SetMusicVolume(float NewMusicVolume)
 	MusicVolume = NewMusicVolume;
 
 	//Handle music volume changing
+}
+
+void UAdvancedGameUserSettings::SetSoundFXVolume(float NewSoundFXVolume)
+{
+	SoundFXVolume = NewSoundFXVolume;
+
+	//Handle Sound effects Volume changing
+
 }
