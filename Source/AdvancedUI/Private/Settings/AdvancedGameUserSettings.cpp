@@ -7,6 +7,7 @@ UAdvancedGameUserSettings::UAdvancedGameUserSettings()
 	:OverallVolume (1.0f)
 	,MusicVolume(1.0f)
 	,SoundFXVolume (1.0f)
+	,bAllowBackgroundAudio(false)
 {
 }
 
@@ -40,4 +41,9 @@ void UAdvancedGameUserSettings::SetSoundFXVolume(float NewSoundFXVolume)
 
 	//Handle Sound effects Volume changing
 
+}
+
+void UAdvancedGameUserSettings::SetAllowBackgroundAudio(bool bNewAllowBackgroundAudio)
+{
+	bAllowBackgroundAudio = bNewAllowBackgroundAudio;
 }

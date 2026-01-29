@@ -38,3 +38,23 @@ protected:
 	FText CurrentDisplayText;
 
 };
+
+UCLASS()
+class ADVANCEDUI_API UListDataObject_StringBool : public UListDataObject_String
+{
+	GENERATED_BODY()
+
+public:
+	void OverrideFalseDisplayText(const FText& NewFlaseDisplayText);
+	void OverrideTrueDisplayText(const FText& NewTrueDisplayText);
+	void SetTrueAsDefault();
+	void SetFalseAsDefault();
+	void TryInitBoolValue();
+
+protected:
+	virtual void OnDataObjectInitialized() override;
+
+private:
+	const FString TrueString = TEXT("true");
+	const FString FalseString = TEXT("false");
+};

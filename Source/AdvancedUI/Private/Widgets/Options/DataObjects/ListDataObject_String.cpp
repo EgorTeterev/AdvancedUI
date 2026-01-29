@@ -151,3 +151,51 @@ bool UListDataObject_String::TryResetBackToDefaultValue()
 	}
 	return false;
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------------
+
+void UListDataObject_StringBool::OverrideTrueDisplayText(const FText& NewTrueDisplayText)
+{
+	if (!AvailableOptionsStringArray.Contains(TrueString))
+	{
+		AddDynamicOption(TrueString, NewTrueDisplayText);
+	}
+}
+
+void UListDataObject_StringBool::OverrideFalseDisplayText(const FText& NewFlaseDisplayText)
+{
+	if (!AvailableOptionsStringArray.Contains(FalseString))
+	{
+		AddDynamicOption(FalseString, NewFlaseDisplayText);
+	}
+}
+
+void UListDataObject_StringBool::SetTrueAsDefault()
+{
+	SetDefaultValueFromString(TrueString);
+}
+
+void UListDataObject_StringBool::SetFalseAsDefault()
+{
+	SetDefaultValueFromString(FalseString);
+}
+
+void UListDataObject_StringBool::TryInitBoolValue()
+{
+	if (!AvailableOptionsStringArray.Contains(TrueString))
+	{
+		AddDynamicOption(TrueString,FText::FromString(TEXT("On")));
+	}
+
+	if (!AvailableOptionsStringArray.Contains(FalseString))
+	{
+		AddDynamicOption(FalseString, FText::FromString(TEXT("Off")));
+	}
+}
+
+void UListDataObject_StringBool::OnDataObjectInitialized()
+{
+	TryInitBoolValue();
+
+	Super::OnDataObjectInitialized();
+}

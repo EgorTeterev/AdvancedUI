@@ -98,7 +98,7 @@ void UOptionsDataRegistry::InitAudioTab()
 	NewAudioOptionsCollection->SetDataID(FName("AudioOptionsCollection"));
 	NewAudioOptionsCollection->SetDataDisplayName(FText::FromString(TEXT("Audio")));
 
-	//VolumeCategory
+	//Volume Category
 	{
 		UListDataObjectCollection* VolumeCategoryCollection = NewObject<UListDataObjectCollection>();
 		VolumeCategoryCollection->SetDataID(FName("VolumeCategory"));
@@ -161,6 +161,27 @@ void UOptionsDataRegistry::InitAudioTab()
 			SoundFXVolume->SetShouldApplyChangeSettingsImmediatly(true);
 
 			VolumeCategoryCollection->AddChildList(SoundFXVolume);
+		}
+	}
+
+	//Sound Category
+	{
+		UListDataObjectCollection* SoundCategoryCollection = NewObject<UListDataObjectCollection>();
+		SoundCategoryCollection->SetDataID(FName("SoundCategory"));
+		SoundCategoryCollection->SetDataDisplayName(FText::FromString(TEXT("Sound")));
+
+		NewAudioOptionsCollection->AddChildList(SoundCategoryCollection);
+
+		{
+			UListDataObject_StringBool* AllowBackgroundAudio = NewObject<UListDataObject_StringBool>();
+			AllowBackgroundAudio->SetDataID(FName("AllowBackgroundAudio"));
+			AllowBackgroundAudio->SetDataDisplayName(FText::FromString(TEXT("Overall Volume")));
+			AllowBackgroundAudio->SetFalseAsDefault();
+			AllowBackgroundAudio->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetAllowBackgroundAudio));
+			AllowBackgroundAudio->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetAllowBackgroundAudio));
+			AllowBackgroundAudio->SetShouldApplyChangeSettingsImmediatly(true);
+
+			SoundCategoryCollection->AddChildList(AllowBackgroundAudio);
 		}
 	}
 
