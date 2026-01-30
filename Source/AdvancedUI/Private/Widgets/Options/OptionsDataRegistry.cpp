@@ -195,6 +195,31 @@ void UOptionsDataRegistry::InitVideoTab()
 	NewVideoOptionsCollection->SetDataID(FName("VideoOptionsCollection"));
 	NewVideoOptionsCollection->SetDataDisplayName(FText::FromString(TEXT("Video")));
 
+
+	//Display Category
+	{
+		UListDataObjectCollection* DisplayCategoryCollection = NewObject<UListDataObjectCollection>();
+		DisplayCategoryCollection->SetDataID(FName("DisplayCategory"));
+		DisplayCategoryCollection->SetDataDisplayName(FText::FromString(TEXT("Display")));
+
+		NewVideoOptionsCollection->AddChildList(DisplayCategoryCollection);
+
+		{
+			UListDataObject_StringEnum* WindowMode = NewObject<UListDataObject_StringEnum>();
+			WindowMode->SetDataID(FName("WindowMode"));
+			WindowMode->SetDataDisplayName(FText::FromString(TEXT("Window Mode")));
+			WindowMode->SetDescriptionRichText(FText::FromString(TEXT("Change window mode")));
+			WindowMode->AddEnumOption(EWindowMode::Fullscreen,FText::FromString(TEXT("Fullscreen")));
+			WindowMode->AddEnumOption(EWindowMode::WindowedFullscreen, FText::FromString(TEXT("Windowed fullscreen")));
+			WindowMode->AddEnumOption(EWindowMode::Windowed, FText::FromString(TEXT("Windowed")));
+			WindowMode->SetDefaultEnumValue(EWindowMode::WindowedFullscreen); 
+			WindowMode->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetFullscreenMode));
+			WindowMode->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetFullscreenMode));
+			WindowMode->SetShouldApplyChangeSettingsImmediatly(true);
+
+			DisplayCategoryCollection->AddChildList(WindowMode);
+		}
+	}
 	RegisteredOptionsTabCollections.Add(NewVideoOptionsCollection);
 }
 

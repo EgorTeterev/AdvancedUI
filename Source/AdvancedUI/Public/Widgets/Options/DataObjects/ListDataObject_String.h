@@ -58,3 +58,35 @@ private:
 	const FString TrueString = TEXT("true");
 	const FString FalseString = TEXT("false");
 };
+
+UCLASS()
+class ADVANCEDUI_API UListDataObject_StringEnum : public UListDataObject_String
+{
+	GENERATED_BODY()
+
+public:
+	template<typename EnumType>
+	void AddEnumOption(EnumType EnumOption, const FText& DisplayText)
+	{
+		UEnum* StaticEnumOption = StaticEnum<EnumType>();
+		const FString ConvertedToStringEnum = StaticEnumOption->GetNameStringByValue(EnumOption);
+
+		AddDynamicOption(ConvertedToStringEnum, DisplayText);
+	}
+
+	template<typename EnumType>
+	EnumType GetCurrentValueAsEnum()
+	{
+		UEnum* StaticEnumOption = StaticEnum<EnumType>();
+		return Cast<EnumType>(StaticEnumOption->GetValueByNameString(CurrentStringValue));
+	}
+
+	template<typename EnumType>
+	void SetDefaultEnumValue(EnumType DefaultValue)
+	{
+		UEnum* StaticEnumOption = StaticEnum<EnumType>();
+		const FString ConvertedToStringEnum = StaticEnumOption->GetNameStringByValue(DefaultValue);
+		SetDefaultValueFromString(ConvertedToStringEnum);
+	}
+
+};
