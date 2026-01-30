@@ -3,6 +3,7 @@
 
 #include "Controllers/CustomPlayerController.h"
 #include "Kismet/GameplayStatics.h"
+#include "Settings/AdvancedGameUserSettings.h"
 #include "Camera/CameraActor.h"
 
 void ACustomPlayerController::OnPossess(APawn* PawnToPossess)
@@ -13,10 +14,16 @@ void ACustomPlayerController::OnPossess(APawn* PawnToPossess)
 	TArray<AActor*> FoundedCameras;
 	UGameplayStatics::GetAllActorsOfClassWithTag(this, ACameraActor::StaticClass(), FName("MainMenuCamera"), FoundedCameras);
 
-	if (FoundedCameras.IsEmpty())
+	if (!FoundedCameras.IsEmpty())
 	{
-		return;
+		SetViewTarget(FoundedCameras[0]);
 	}
-
-	SetViewTarget(FoundedCameras[0]);
+	
+	UAdvancedGameUserSettings* GameUserSettings = UAdvancedGameUserSettings::Get();
+	
+	if (GameUserSettings->GetLastCPUBenchmarkResult() == -1.f || GameUserSettings->GetLastGPUBenchmarkResult() == -1.f)
+	{
+		GameUserSettings->RunHardwareBenchmark();
+		GameUserSettings->ApplyHardwareBenchmarkResults();
+	}
 }
