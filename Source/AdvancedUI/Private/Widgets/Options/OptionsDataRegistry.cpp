@@ -205,6 +205,17 @@ void UOptionsDataRegistry::InitVideoTab()
 
 		NewVideoOptionsCollection->AddChildList(DisplayCategoryCollection);
 
+		FOptionDataEditConditionDescriptor PackagedBuildOnlyCondition;
+		PackagedBuildOnlyCondition.SetEditCondition(
+			[]()->bool
+			{
+				const bool bIsPackagd = !GIsEditor && !GIsPlayInEditorWorld;
+
+				return bIsPackagd;
+			}
+		);
+		PackagedBuildOnlyCondition.SetDisableRichReason(TEXT("\n\n<Disabled>This settings can only be adjusted in a packaged buld.</>"));
+
 		{
 			UListDataObject_StringEnum* WindowMode = NewObject<UListDataObject_StringEnum>();
 			WindowMode->SetDataID(FName("WindowMode"));
@@ -218,6 +229,7 @@ void UOptionsDataRegistry::InitVideoTab()
 			WindowMode->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetFullscreenMode));
 			WindowMode->SetShouldApplyChangeSettingsImmediatly(true);
 
+			WindowMode->AddEditCondition(PackagedBuildOnlyCondition);
 			DisplayCategoryCollection->AddChildList(WindowMode);
 		}
 		{
@@ -230,6 +242,7 @@ void UOptionsDataRegistry::InitVideoTab()
 			ScreenResolution->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetScreenResolution));
 			ScreenResolution->SetShouldApplyChangeSettingsImmediatly(true);
 
+			ScreenResolution->AddEditCondition(PackagedBuildOnlyCondition);
 			DisplayCategoryCollection->AddChildList(ScreenResolution);
 		}
 	}
