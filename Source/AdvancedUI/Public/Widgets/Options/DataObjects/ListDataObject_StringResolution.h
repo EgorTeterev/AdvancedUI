@@ -16,7 +16,7 @@ class ADVANCEDUI_API UListDataObject_StringResolution : public UListDataObject_S
 
 public:
 	void InitResolutionValues();
-
+	FString GetMaximumAllowedResolution() const { return MaximumAllowedResolution; };
 protected:
 	virtual void OnDataObjectInitialized() override;
 

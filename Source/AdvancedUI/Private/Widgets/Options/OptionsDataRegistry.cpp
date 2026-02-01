@@ -216,24 +216,29 @@ void UOptionsDataRegistry::InitVideoTab()
 		);
 		PackagedBuildOnlyCondition.SetDisableRichReason(TEXT("\n\n<Disabled>This settings can only be adjusted in a packaged buld.</>"));
 
+		UListDataObject_StringEnum* CachedWindowMode = nullptr;
 		{
 			UListDataObject_StringEnum* WindowMode = NewObject<UListDataObject_StringEnum>();
 			WindowMode->SetDataID(FName("WindowMode"));
 			WindowMode->SetDataDisplayName(FText::FromString(TEXT("Window Mode")));
 			WindowMode->SetDescriptionRichText(FText::FromString(TEXT("Change window mode")));
 			WindowMode->AddEnumOption(EWindowMode::Fullscreen,FText::FromString(TEXT("Fullscreen")));
-			WindowMode->AddEnumOption(EWindowMode::WindowedFullscreen, FText::FromString(TEXT("Windowed fullscreen")));
+			WindowMode->AddEnumOption(EWindowMode::WindowedFullscreen, FText::FromString(TEXT("Borderless")));
 			WindowMode->AddEnumOption(EWindowMode::Windowed, FText::FromString(TEXT("Windowed")));
 			WindowMode->SetDefaultEnumValue(EWindowMode::WindowedFullscreen); 
 			WindowMode->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetFullscreenMode));
 			WindowMode->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetFullscreenMode));
 			WindowMode->SetShouldApplyChangeSettingsImmediatly(true);
 
+			CachedWindowMode = WindowMode;
+
 			WindowMode->AddEditCondition(PackagedBuildOnlyCondition);
 			DisplayCategoryCollection->AddChildList(WindowMode);
 		}
+
+
 		{
-			UListDataObject_StringResolution* ScreenResolution = NewObject<		UListDataObject_StringResolution>();
+			UListDataObject_StringResolution* ScreenResolution = NewObject<UListDataObject_StringResolution>();
 			ScreenResolution->SetDataID(FName("ScreenResolution"));
 			ScreenResolution->SetDataDisplayName(FText::FromString(TEXT("Screen Resolution")));
 			ScreenResolution->SetDescriptionRichText(FText::FromString(TEXT("Change screen resolution")));
@@ -242,7 +247,21 @@ void UOptionsDataRegistry::InitVideoTab()
 			ScreenResolution->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetScreenResolution));
 			ScreenResolution->SetShouldApplyChangeSettingsImmediatly(true);
 
+			FOptionDataEditConditionDescriptor NonBorderlessWindowEditCondition;
+			NonBorderlessWindowEditCondition.SetEditCondition(
+				[CachedWindowMode]()->bool
+				{
+					const bool bIsBorderless = CachedWindowMode->GetCurrentValueAsEnum<EWindowMode::Type>() == EWindowMode::Type::WindowedFullscreen;
+
+					return !bIsBorderless;
+				}
+			);
+			NonBorderlessWindowEditCondition.SetDisableRichReason(TEXT("\n\n<Disabled>This settings cant edited in 'Borderless' window mode.</>"));
+			NonBorderlessWindowEditCondition.SetDisabledForcedStringValue(ScreenResolution->GetMaximumAllowedResolution());
+
 			ScreenResolution->AddEditCondition(PackagedBuildOnlyCondition);
+			ScreenResolution->AddEditCondition(NonBorderlessWindowEditCondition);
+
 			DisplayCategoryCollection->AddChildList(ScreenResolution);
 		}
 	}

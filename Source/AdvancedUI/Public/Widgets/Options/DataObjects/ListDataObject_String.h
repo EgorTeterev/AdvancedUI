@@ -32,6 +32,9 @@ protected:
 	virtual bool CanResetBackToDefaultValue() const override;
 	virtual bool TryResetBackToDefaultValue() override;
 
+	virtual bool CanSetToForcedStringValue(const FString& ForcedValue) const override;
+	virtual void OnSetToForcedStringValue(const FString& ForcedValue) override;
+
 	TArray<FString> AvailableOptionsStringArray;
 	TArray<FText> AvailableOptionsTextArray;
 	FString CurrentStringValue;
@@ -78,7 +81,7 @@ public:
 	EnumType GetCurrentValueAsEnum()
 	{
 		UEnum* StaticEnumOption = StaticEnum<EnumType>();
-		return Cast<EnumType>(StaticEnumOption->GetValueByNameString(CurrentStringValue));
+		return StaticCast<EnumType>(StaticEnumOption->GetValueByNameString(CurrentStringValue));
 	}
 
 	template<typename EnumType>

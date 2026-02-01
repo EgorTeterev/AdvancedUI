@@ -152,6 +152,25 @@ bool UListDataObject_String::TryResetBackToDefaultValue()
 	return false;
 }
 
+bool UListDataObject_String::CanSetToForcedStringValue(const FString& ForcedValue) const
+{
+	return CurrentStringValue != ForcedValue;
+}
+
+void UListDataObject_String::OnSetToForcedStringValue(const FString& ForcedValue)
+{
+	CurrentStringValue = ForcedValue;
+
+	TrySetDisplayTextFromStringValue(CurrentStringValue);
+
+	if (DataDynamicSetter)
+	{
+		DataDynamicSetter->SetValueFromString(CurrentStringValue);
+
+		NotifyListDataModified(this, EOptionsListDataModifyReason::DependencyModified);
+	}
+}
+
 //------------------------------------------------------------------------------------------------------------------------------------------------
 
 void UListDataObject_StringBool::OverrideTrueDisplayText(const FText& NewTrueDisplayText)
