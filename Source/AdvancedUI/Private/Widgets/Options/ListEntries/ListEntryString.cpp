@@ -33,6 +33,14 @@ void UListEntryString::OnOwningListDataObjectSet(UListDataObjectBase* OwningList
 
 }
 
+void UListEntryString::OnToggleEditableState(bool bIsEditable)
+{
+	Super::OnToggleEditableState(bIsEditable);
+
+	PreviousOptionCommonButton->SetIsEnabled(bIsEditable);
+	OptionCommonRotator->SetIsEnabled(bIsEditable);
+	NextOptionCommonButton->SetIsEnabled(bIsEditable);
+}
 
 void UListEntryString::OnOwningListDataObjectModified(UListDataObjectBase* OwningModifiedData, EOptionsListDataModifyReason ModifyReason)
 {
@@ -41,7 +49,6 @@ void UListEntryString::OnOwningListDataObjectModified(UListDataObjectBase* Ownin
 		OptionCommonRotator->SetSelectedOptionByText(CachedStringDataObject->GetCurrentDisplayText());
 	}
 }
-
 
 void UListEntryString::OnPreviousOptionButtonClicked()
 {

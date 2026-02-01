@@ -9,8 +9,49 @@ void UListDataObjectBase::InitDataObject()
 	OnDataObjectInitialized();
 }
 
+void UListDataObjectBase::AddEditCondition(const FOptionDataEditConditionDescriptor& EditCondition)
+{
+	EditConditionArray.Add(EditCondition);
+}
+
+bool UListDataObjectBase::IsDataCurrenlyEditable()
+{
+	bool bIsEditable = true;
+
+	if (EditConditionArray.IsEmpty())
+	{
+		return bIsEditable;
+	}
+	
+	FString DisableRichReason;
+	for (const FOptionDataEditConditionDescriptor& Condition : EditConditionArray)
+	{
+		if (Condition.IsEditConditionMet() || !Condition.IsValid())
+		{
+			continue;
+		}
+
+		bIsEditable = false;
+
+		DisableRichReason.Append(Condition.GetDisableRichReason());
+		SetDisabledRichText(FText::FromString(DisableRichReason));
+
+		if (Condition.HasForcedStringValue())
+		{
+			const FString ForcedStringValue = Condition.GetDisabledForcedStringValue();
+
+			if (CanSetToForcedStringValue(ForcedStringValue))
+			{
+				OnSetToForcedStringValue(ForcedStringValue);
+			}
+		}
+	}
+	return bIsEditable;
+}
+
 void UListDataObjectBase::OnDataObjectInitialized()
 {
+
 }
 
 void UListDataObjectBase::NotifyListDataModified(UListDataObjectBase* ModifiedData, EOptionsListDataModifyReason ModifyReason)

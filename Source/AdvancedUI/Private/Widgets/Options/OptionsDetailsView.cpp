@@ -35,7 +35,7 @@ void UOptionsDetailsView::UpdateDetailsViewInfo(UListDataObjectBase* DataObject,
 	);
 	
 	DynamicDetails->SetText(FText::FromString(DynamicDetailsText));
-	DisableReason->SetText(DataObject->GetDisabledRichText());
+	DisableReason->SetText(DataObject->IsDataCurrenlyEditable() ? FText::GetEmpty() : DataObject->GetDisabledRichText());
 }
 
 void UOptionsDetailsView::ClearDetailsViewInfo()

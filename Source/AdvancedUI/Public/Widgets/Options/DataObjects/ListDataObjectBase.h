@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
 #include "Types/AdvancedUIEnumTypes.h"
+#include "Types/AdvancedUIStructTypes.h"
 #include "ListDataObjectBase.generated.h"
 
 #define LIST_DATA_ACCESSORS(DataType,PropertyName) \
@@ -38,10 +39,20 @@ public:
 	virtual TArray<UListDataObjectBase*> GetAllChildListData() const { return TArray<UListDataObjectBase*>(); };
 	virtual bool HasAnyChildListData() const { return false; };
 	void SetShouldApplyChangeSettingsImmediatly(bool bShouldApply) { bShouldApplyChangeSettingsImmediatly = bShouldApply; };
+	
+	void AddEditCondition(const FOptionDataEditConditionDescriptor& EditCondition);
+	bool IsDataCurrenlyEditable();
 
 protected:
 	virtual void OnDataObjectInitialized();
 	virtual void NotifyListDataModified(UListDataObjectBase* ModifiedData, EOptionsListDataModifyReason ModifyReason = EOptionsListDataModifyReason::DirectlyModified);
+	
+	//override to allow value to be set to the forced string value
+	virtual bool CanSetToForcedStringValue(const FString& ForcedValue) const { return false; }
+
+	//override to specify how to set the current value to forced value
+	virtual void OnSetToForcedStringValue(const FString& ForcedValue) {}
+
 
 private:
 	FName DataID;
@@ -54,4 +65,7 @@ private:
 	UListDataObjectBase* ParentData;
 
 	bool bShouldApplyChangeSettingsImmediatly = false;
+
+	UPROPERTY(Transient)
+	TArray<FOptionDataEditConditionDescriptor> EditConditionArray;
 };

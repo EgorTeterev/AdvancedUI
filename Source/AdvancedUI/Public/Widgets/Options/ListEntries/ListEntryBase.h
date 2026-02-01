@@ -37,6 +37,9 @@ protected:
 	//The child widget class override this function to update UI values after its data was modified.
 	virtual void OnOwningListDataObjectModified(UListDataObjectBase* OwningModifiedData, EOptionsListDataModifyReason ModifyReason);
 
+	//The child should override to change editable state of widgets and custom visual
+	virtual void OnToggleEditableState(bool bIsEditable);
+
 	void SelectThisEntryWidget();
 
 private:

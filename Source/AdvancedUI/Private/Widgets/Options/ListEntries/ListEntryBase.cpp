@@ -50,11 +50,21 @@ void UListEntryBase::OnOwningListDataObjectSet(UListDataObjectBase* OwningListDa
 	{
 		OwningListDataObject->OnListDataModified.AddUObject(this, &ThisClass::OnOwningListDataObjectModified);
 	}
+
+	OnToggleEditableState(OwningListDataObject->IsDataCurrenlyEditable());
 }
 
 void UListEntryBase::OnOwningListDataObjectModified(UListDataObjectBase* OwningModifiedData, EOptionsListDataModifyReason ModifyReason)
 {
 
+}
+
+void UListEntryBase::OnToggleEditableState(bool bIsEditable)
+{
+	if (CommonTextDisplayName)
+	{
+		CommonTextDisplayName->SetIsEnabled(bIsEditable);
+	}
 }
 
 void UListEntryBase::SelectThisEntryWidget()

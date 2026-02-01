@@ -4,6 +4,7 @@
 #include "Widgets/Options/OptionsDataRegistry.h"
 #include "Widgets/Options/DataObjects/ListDataObject_String.h"
 #include "Widgets/Options/DataObjects/ListDataObjectCollection.h"
+#include "Widgets/Options/DataObjects/ListDataObject_StringResolution.h"
 #include "Widgets/Options/OptionsDataInteractionHelper.h"
 #include "FrontendFunctionLibrary.h"
 #include "Tags/UIGameplayTags.h"
@@ -218,6 +219,18 @@ void UOptionsDataRegistry::InitVideoTab()
 			WindowMode->SetShouldApplyChangeSettingsImmediatly(true);
 
 			DisplayCategoryCollection->AddChildList(WindowMode);
+		}
+		{
+			UListDataObject_StringResolution* ScreenResolution = NewObject<		UListDataObject_StringResolution>();
+			ScreenResolution->SetDataID(FName("ScreenResolution"));
+			ScreenResolution->SetDataDisplayName(FText::FromString(TEXT("Screen Resolution")));
+			ScreenResolution->SetDescriptionRichText(FText::FromString(TEXT("Change screen resolution")));
+			ScreenResolution->InitResolutionValues();
+			ScreenResolution->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetScreenResolution));
+			ScreenResolution->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetScreenResolution));
+			ScreenResolution->SetShouldApplyChangeSettingsImmediatly(true);
+
+			DisplayCategoryCollection->AddChildList(ScreenResolution);
 		}
 	}
 	RegisteredOptionsTabCollections.Add(NewVideoOptionsCollection);
