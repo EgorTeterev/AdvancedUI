@@ -46,7 +46,16 @@ bool UListDataObjectBase::IsDataCurrenlyEditable()
 			}
 		}
 	}
+
 	return bIsEditable;
+}
+
+void UListDataObjectBase::AddEditDependencyObject(UListDataObjectBase* ObjectToDependOn)
+{
+	if (!ObjectToDependOn->OnListDataModified.IsBoundToObject(this))
+	{
+		ObjectToDependOn->OnListDataModified.AddUObject(this, &ThisClass::OnDependencyObjectWasModified);
+	}
 }
 
 void UListDataObjectBase::OnDataObjectInitialized()
@@ -62,4 +71,9 @@ void UListDataObjectBase::NotifyListDataModified(UListDataObjectBase* ModifiedDa
 	{
 		UAdvancedGameUserSettings::Get()->ApplySettings(true);
 	}
+}
+
+void UListDataObjectBase::OnDependencyObjectWasModified(UListDataObjectBase* ModifiedDependencyObject, EOptionsListDataModifyReason ModifyReason)
+{
+	OnDependecyObjectModified.Broadcast(ModifiedDependencyObject, ModifyReason);
 }

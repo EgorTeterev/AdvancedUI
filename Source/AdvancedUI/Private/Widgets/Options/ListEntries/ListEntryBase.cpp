@@ -13,7 +13,8 @@ void UListEntryBase::NativeOnListItemObjectSet(UObject* ListItemObject)
 {
 	IUserObjectListEntry::NativeOnListItemObjectSet(ListItemObject);
 
-	OnOwningListDataObjectSet(CastChecked<UListDataObjectBase>(ListItemObject));
+	CachedOwnDataObject = CastChecked<UListDataObjectBase>(ListItemObject);
+	OnOwningListDataObjectSet(CachedOwnDataObject);
 
 }
 
@@ -51,12 +52,26 @@ void UListEntryBase::OnOwningListDataObjectSet(UListDataObjectBase* OwningListDa
 		OwningListDataObject->OnListDataModified.AddUObject(this, &ThisClass::OnOwningListDataObjectModified);
 	}
 
+	if (!OwningListDataObject->OnDependecyObjectModified.IsBoundToObject(this))
+	{
+		OwningListDataObject->OnDependecyObjectModified.AddUObject(this,&ThisClass::OnOwningDependencyObjectModified);
+	}
+
+
 	OnToggleEditableState(OwningListDataObject->IsDataCurrenlyEditable());
 }
 
 void UListEntryBase::OnOwningListDataObjectModified(UListDataObjectBase* OwningModifiedData, EOptionsListDataModifyReason ModifyReason)
 {
 
+}
+
+void UListEntryBase::OnOwningDependencyObjectModified(UListDataObjectBase* OwningDependencyData, EOptionsListDataModifyReason ModifyReason)
+{
+	if (CachedOwnDataObject)
+	{
+		OnToggleEditableState(CachedOwnDataObject->IsDataCurrenlyEditable());
+	}
 }
 
 void UListEntryBase::OnToggleEditableState(bool bIsEditable)

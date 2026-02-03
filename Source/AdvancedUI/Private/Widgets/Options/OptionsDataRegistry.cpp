@@ -262,6 +262,9 @@ void UOptionsDataRegistry::InitVideoTab()
 			ScreenResolution->AddEditCondition(PackagedBuildOnlyCondition);
 			ScreenResolution->AddEditCondition(NonBorderlessWindowEditCondition);
 
+			ScreenResolution->AddEditDependencyObject(CachedWindowMode);
+
+
 			DisplayCategoryCollection->AddChildList(ScreenResolution);
 		}
 	}

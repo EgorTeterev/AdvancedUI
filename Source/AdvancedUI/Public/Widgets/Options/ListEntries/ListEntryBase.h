@@ -37,6 +37,8 @@ protected:
 	//The child widget class override this function to update UI values after its data was modified.
 	virtual void OnOwningListDataObjectModified(UListDataObjectBase* OwningModifiedData, EOptionsListDataModifyReason ModifyReason);
 
+	virtual void OnOwningDependencyObjectModified(UListDataObjectBase* OwningDependencyData, EOptionsListDataModifyReason ModifyReason);
+
 	//The child should override to change editable state of widgets and custom visual
 	virtual void OnToggleEditableState(bool bIsEditable);
 
@@ -45,4 +47,7 @@ protected:
 private:
 	UPROPERTY(BlueprintReadOnly,meta=(BindWidgetOptional,AllowPrivateAccess = "true"))
 	UCommonTextBlock* CommonTextDisplayName;
+
+	UPROPERTY(Transient)
+	UListDataObjectBase* CachedOwnDataObject;
 };

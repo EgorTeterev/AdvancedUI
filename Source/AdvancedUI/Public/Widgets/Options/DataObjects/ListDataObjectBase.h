@@ -23,7 +23,9 @@ class ADVANCEDUI_API UListDataObjectBase : public UObject
 public:
 	void InitDataObject();
 	DECLARE_MULTICAST_DELEGATE_TwoParams(FOnListDataModifiedDelegate, UListDataObjectBase*, EOptionsListDataModifyReason);
+
 	FOnListDataModifiedDelegate OnListDataModified;
+	FOnListDataModifiedDelegate OnDependecyObjectModified;
 
 	LIST_DATA_ACCESSORS(FName, DataID);
 	LIST_DATA_ACCESSORS(FText, DataDisplayName);
@@ -42,7 +44,8 @@ public:
 	
 	void AddEditCondition(const FOptionDataEditConditionDescriptor& EditCondition);
 	bool IsDataCurrenlyEditable();
-
+	
+	void AddEditDependencyObject(UListDataObjectBase* ObjectToDependOn);
 protected:
 	virtual void OnDataObjectInitialized();
 	virtual void NotifyListDataModified(UListDataObjectBase* ModifiedData, EOptionsListDataModifyReason ModifyReason = EOptionsListDataModifyReason::DirectlyModified);
@@ -53,6 +56,7 @@ protected:
 	//override to specify how to set the current value to forced value
 	virtual void OnSetToForcedStringValue(const FString& ForcedValue) {}
 
+	void OnDependencyObjectWasModified(UListDataObjectBase* ModifiedDependencyObject, EOptionsListDataModifyReason ModifyReason);
 
 private:
 	FName DataID;
