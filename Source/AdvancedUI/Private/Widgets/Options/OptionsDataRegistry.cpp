@@ -192,9 +192,9 @@ void UOptionsDataRegistry::InitAudioTab()
 
 void UOptionsDataRegistry::InitVideoTab()
 {
-	UListDataObjectCollection* NewVideoOptionsCollection = NewObject<UListDataObjectCollection>();
-	NewVideoOptionsCollection->SetDataID(FName("VideoOptionsCollection"));
-	NewVideoOptionsCollection->SetDataDisplayName(FText::FromString(TEXT("Video")));
+	UListDataObjectCollection* VideoOptionsCollection = NewObject<UListDataObjectCollection>();
+	VideoOptionsCollection->SetDataID(FName("VideoOptionsCollection"));
+	VideoOptionsCollection->SetDataDisplayName(FText::FromString(TEXT("Video")));
 
 
 	//Display Category
@@ -203,7 +203,7 @@ void UOptionsDataRegistry::InitVideoTab()
 		DisplayCategoryCollection->SetDataID(FName("DisplayCategory"));
 		DisplayCategoryCollection->SetDataDisplayName(FText::FromString(TEXT("Display")));
 
-		NewVideoOptionsCollection->AddChildList(DisplayCategoryCollection);
+		VideoOptionsCollection->AddChildList(DisplayCategoryCollection);
 
 		FOptionDataEditConditionDescriptor PackagedBuildOnlyCondition;
 		PackagedBuildOnlyCondition.SetEditCondition(
@@ -268,7 +268,34 @@ void UOptionsDataRegistry::InitVideoTab()
 			DisplayCategoryCollection->AddChildList(ScreenResolution);
 		}
 	}
-	RegisteredOptionsTabCollections.Add(NewVideoOptionsCollection);
+
+	//Graphics Category
+	{
+		UListDataObjectCollection* GraphicsCategoryCollection = NewObject<UListDataObjectCollection>();
+		GraphicsCategoryCollection->SetDataID(FName("GraphicsCategory"));
+		GraphicsCategoryCollection->SetDataDisplayName(FText::FromString(TEXT("Graphics")));
+
+		VideoOptionsCollection->AddChildList(GraphicsCategoryCollection);
+
+		//Display Gamma
+		{
+			UListDataObject_Scalar* DisplayGamma = NewObject<UListDataObject_Scalar>();
+			DisplayGamma->SetDataID(FName("DisplayGamma"));
+			DisplayGamma->SetDataDisplayName(FText::FromString(TEXT("Brightness")));
+			DisplayGamma->SetDescriptionRichText(FText::FromString(TEXT("Change brightness")));
+			DisplayGamma->SetDisplayValueRange(TRange<float>(0.f, 1.f));
+			DisplayGamma->SetOutputValueRange(TRange<float>(1.7f,2.7f)); // Unreal engine default value is 2.2.
+			DisplayGamma->SetDisplayNumericType(ECommonNumericType::Percentage);
+			DisplayGamma->SetNumberFormattingOptions(UListDataObject_Scalar::NoDecimal());
+			DisplayGamma->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetCurrentDisplayGamma));
+			DisplayGamma->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetCurrentDisplayGamma));
+			DisplayGamma->SetDefaultValueFromString(LexToString(2.2f));
+
+			GraphicsCategoryCollection->AddChildList(DisplayGamma);
+		}
+
+	}
+	RegisteredOptionsTabCollections.Add(VideoOptionsCollection);
 }
 
 void UOptionsDataRegistry::InitControlTab()

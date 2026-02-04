@@ -47,3 +47,21 @@ void UAdvancedGameUserSettings::SetAllowBackgroundAudio(bool bNewAllowBackground
 {
 	bAllowBackgroundAudio = bNewAllowBackgroundAudio;
 }
+
+float UAdvancedGameUserSettings::GetCurrentDisplayGamma() const
+{
+	if (GEngine)
+	{
+		return GEngine->DisplayGamma;
+	}
+
+	return 2.2f;
+}
+
+void UAdvancedGameUserSettings::SetCurrentDisplayGamma(float NewDisplayGamma) const
+{
+	if (GEngine)
+	{
+		GEngine->DisplayGamma = NewDisplayGamma;
+	}
+}

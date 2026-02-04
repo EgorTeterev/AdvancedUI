@@ -43,10 +43,17 @@ public:
 	UFUNCTION()
 	void SetSoundFXVolume(float NewSoundFXVolume);
 
+	UFUNCTION()
 	bool GetAllowBackgroundAudio() const { return bAllowBackgroundAudio; };
 
+	UFUNCTION()
 	void SetAllowBackgroundAudio(bool bNewAllowBackgroundAudio);
 
+	UFUNCTION()
+	float GetCurrentDisplayGamma() const;
+	
+	UFUNCTION()
+	void SetCurrentDisplayGamma(float NewDisplayGamma) const;
 private:
 	//Game collection tab
 	UPROPERTY(Config)
