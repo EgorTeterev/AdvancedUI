@@ -319,9 +319,10 @@ void UOptionsDataRegistry::InitVideoTab()
 		//Resolution Scale
 		{
 			UListDataObject_Scalar* ResolutionScale = NewObject<UListDataObject_Scalar>();
+
 			ResolutionScale->SetDataID(FName("ResolutionScale"));
 			ResolutionScale->SetDataDisplayName(FText::FromString(TEXT("Resolution Scale")));
-			ResolutionScale->SetDescriptionRichText(FText::FromString(TEXT("Changes resolution")));
+			ResolutionScale->SetDescriptionRichText(FText::FromString(TEXT("Changes resolution.")));
 
 			ResolutionScale->SetDisplayValueRange(TRange<float>(0.f,1.f));
 			ResolutionScale->SetOutputValueRange(TRange<float>(0.1f,1.f));
@@ -341,8 +342,10 @@ void UOptionsDataRegistry::InitVideoTab()
 		//Global Illumination
 		{
 			UListDataObject_StringInteger* GlobalIlluminationQuality = NewObject<UListDataObject_StringInteger>();
+
+			GlobalIlluminationQuality->SetDataID(FName("GlobalIlluminationQuality"));
 			GlobalIlluminationQuality->SetDataDisplayName(FText::FromString(TEXT("Overall Quality")));
-			GlobalIlluminationQuality->SetDescriptionRichText(FText::FromString(TEXT("Changes other quality options.")));
+			GlobalIlluminationQuality->SetDescriptionRichText(FText::FromString(TEXT("Global illumination.")));
 			GlobalIlluminationQuality->AddIntegerOption(0, FText::FromString(TEXT("Low")));
 			GlobalIlluminationQuality->AddIntegerOption(1, FText::FromString(TEXT("Mid")));
 			GlobalIlluminationQuality->AddIntegerOption(2, FText::FromString(TEXT("High")));
@@ -359,6 +362,56 @@ void UOptionsDataRegistry::InitVideoTab()
 
 			GraphicsCategoryCollection->AddChildList(GlobalIlluminationQuality);
 		}
+
+		//Shadow Quality
+		{
+			UListDataObject_StringInteger* ShadowQuality = NewObject<UListDataObject_StringInteger>();
+			ShadowQuality->SetDataID(FName("ShadowQuality"));
+
+			ShadowQuality->SetDataDisplayName(FText::FromString(TEXT("Shadow Quality")));
+			ShadowQuality->SetDescriptionRichText(FText::FromString(TEXT("Shadow quality.")));
+			ShadowQuality->AddIntegerOption(0, FText::FromString(TEXT("Low")));
+			ShadowQuality->AddIntegerOption(1, FText::FromString(TEXT("Mid")));
+			ShadowQuality->AddIntegerOption(2, FText::FromString(TEXT("High")));
+			ShadowQuality->AddIntegerOption(3, FText::FromString(TEXT("Epic")));
+			ShadowQuality->AddIntegerOption(4, FText::FromString(TEXT("Cinema")));
+
+			ShadowQuality->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetShadowQuality));
+			ShadowQuality->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetShadowQuality));
+
+			ShadowQuality->SetShouldApplyChangeSettingsImmediatly(true);
+
+			ShadowQuality->AddEditDependencyObject(OverallQuality);
+			OverallQuality->AddEditDependencyObject(ShadowQuality);
+
+			GraphicsCategoryCollection->AddChildList(ShadowQuality);
+		}
+
+		//Anti Aliasing
+		{
+			UListDataObject_StringInteger* AntiAliasingQuality = NewObject<UListDataObject_StringInteger>();
+			AntiAliasingQuality->SetDataID(FName("AntiAliasingQuality"));
+
+			AntiAliasingQuality->SetDataDisplayName(FText::FromString(TEXT("Anti-AliasingQuality")));
+			AntiAliasingQuality->SetDescriptionRichText(FText::FromString(TEXT("Anti Aliasing Quality.")));
+			AntiAliasingQuality->AddIntegerOption(0, FText::FromString(TEXT("Low")));
+			AntiAliasingQuality->AddIntegerOption(1, FText::FromString(TEXT("Mid")));
+			AntiAliasingQuality->AddIntegerOption(2, FText::FromString(TEXT("High")));
+			AntiAliasingQuality->AddIntegerOption(3, FText::FromString(TEXT("Epic")));
+			AntiAliasingQuality->AddIntegerOption(4, FText::FromString(TEXT("Cinema")));
+
+			AntiAliasingQuality->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetAntiAliasingQuality));
+			AntiAliasingQuality->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetAntiAliasingQuality));
+
+			AntiAliasingQuality->SetShouldApplyChangeSettingsImmediatly(true);
+
+			AntiAliasingQuality->AddEditDependencyObject(OverallQuality);
+			OverallQuality->AddEditDependencyObject(AntiAliasingQuality);
+
+			GraphicsCategoryCollection->AddChildList(AntiAliasingQuality);
+		}
+
+
 	}
 
 	RegisteredOptionsTabCollections.Add(VideoOptionsCollection);
