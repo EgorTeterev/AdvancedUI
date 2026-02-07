@@ -56,7 +56,8 @@ protected:
 	//override to specify how to set the current value to forced value
 	virtual void OnSetToForcedStringValue(const FString& ForcedValue) {}
 
-	void OnDependencyObjectWasModified(UListDataObjectBase* ModifiedDependencyObject, EOptionsListDataModifyReason ModifyReason);
+	//Is called when dependency data is changed
+	virtual void OnDependencyObjectWasModified(UListDataObjectBase* ModifiedDependencyObject, EOptionsListDataModifyReason ModifyReason);
 
 private:
 	FName DataID;

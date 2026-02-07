@@ -294,7 +294,73 @@ void UOptionsDataRegistry::InitVideoTab()
 			GraphicsCategoryCollection->AddChildList(DisplayGamma);
 		}
 
+
+		UListDataObject_StringInteger* OverallQuality = NewObject<UListDataObject_StringInteger>();
+		OverallQuality->SetDataID(FName("OverallQuality"));
+
+		//Overall Quality
+		{
+			OverallQuality->SetDataDisplayName(FText::FromString(TEXT("Overall Quality")));
+			OverallQuality->SetDescriptionRichText(FText::FromString(TEXT("Changes other quality options.")));
+			OverallQuality->AddIntegerOption(0,FText::FromString(TEXT("Low")));
+			OverallQuality->AddIntegerOption(1,FText::FromString(TEXT("Mid")));
+			OverallQuality->AddIntegerOption(2,FText::FromString(TEXT("High")));
+			OverallQuality->AddIntegerOption(3,FText::FromString(TEXT("Epic")));
+			OverallQuality->AddIntegerOption(4,FText::FromString(TEXT("Cinema")));
+
+			OverallQuality->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetOverallScalabilityLevel));
+			OverallQuality->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetOverallScalabilityLevel));
+			
+			OverallQuality->SetShouldApplyChangeSettingsImmediatly(true);
+
+			GraphicsCategoryCollection->AddChildList(OverallQuality);
+		}
+
+		//Resolution Scale
+		{
+			UListDataObject_Scalar* ResolutionScale = NewObject<UListDataObject_Scalar>();
+			ResolutionScale->SetDataID(FName("ResolutionScale"));
+			ResolutionScale->SetDataDisplayName(FText::FromString(TEXT("Resolution Scale")));
+			ResolutionScale->SetDescriptionRichText(FText::FromString(TEXT("Changes resolution")));
+
+			ResolutionScale->SetDisplayValueRange(TRange<float>(0.f,1.f));
+			ResolutionScale->SetOutputValueRange(TRange<float>(0.1f,1.f));
+			ResolutionScale->SetDisplayNumericType(ECommonNumericType::Percentage);
+			ResolutionScale->SetNumberFormattingOptions(UListDataObject_Scalar::NoDecimal());
+
+			ResolutionScale->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetResolutionScaleNormalized));
+			ResolutionScale->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetResolutionScaleNormalized));
+
+			ResolutionScale->SetShouldApplyChangeSettingsImmediatly(true);
+
+			ResolutionScale->AddEditDependencyObject(OverallQuality);
+
+			GraphicsCategoryCollection->AddChildList(ResolutionScale);
+		}
+
+		//Global Illumination
+		{
+			UListDataObject_StringInteger* GlobalIlluminationQuality = NewObject<UListDataObject_StringInteger>();
+			GlobalIlluminationQuality->SetDataDisplayName(FText::FromString(TEXT("Overall Quality")));
+			GlobalIlluminationQuality->SetDescriptionRichText(FText::FromString(TEXT("Changes other quality options.")));
+			GlobalIlluminationQuality->AddIntegerOption(0, FText::FromString(TEXT("Low")));
+			GlobalIlluminationQuality->AddIntegerOption(1, FText::FromString(TEXT("Mid")));
+			GlobalIlluminationQuality->AddIntegerOption(2, FText::FromString(TEXT("High")));
+			GlobalIlluminationQuality->AddIntegerOption(3, FText::FromString(TEXT("Epic")));
+			GlobalIlluminationQuality->AddIntegerOption(4, FText::FromString(TEXT("Cinema")));
+
+			GlobalIlluminationQuality->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetGlobalIlluminationQuality));
+			GlobalIlluminationQuality->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetGlobalIlluminationQuality));
+
+			GlobalIlluminationQuality->SetShouldApplyChangeSettingsImmediatly(true);
+
+			GlobalIlluminationQuality->AddEditDependencyObject(OverallQuality);
+			OverallQuality->AddEditDependencyObject(GlobalIlluminationQuality);
+
+			GraphicsCategoryCollection->AddChildList(GlobalIlluminationQuality);
+		}
 	}
+
 	RegisteredOptionsTabCollections.Add(VideoOptionsCollection);
 }
 

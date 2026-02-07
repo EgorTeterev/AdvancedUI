@@ -40,5 +40,4 @@ private:
 	UPROPERTY(Transient)
 	UListDataObject_String* CachedStringDataObject;
 
-
 };

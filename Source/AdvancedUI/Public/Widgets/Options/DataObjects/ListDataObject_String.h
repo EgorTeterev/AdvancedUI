@@ -42,6 +42,8 @@ protected:
 
 };
 
+//------------------------------------------------------------------------------------------------------------------------------------------------
+
 UCLASS()
 class ADVANCEDUI_API UListDataObject_StringBool : public UListDataObject_String
 {
@@ -61,6 +63,8 @@ private:
 	const FString TrueString = TEXT("true");
 	const FString FalseString = TEXT("false");
 };
+
+//------------------------------------------------------------------------------------------------------------------------------------------------
 
 UCLASS()
 class ADVANCEDUI_API UListDataObject_StringEnum : public UListDataObject_String
@@ -92,4 +96,22 @@ public:
 		SetDefaultValueFromString(ConvertedToStringEnum);
 	}
 
+};
+
+//------------------------------------------------------------------------------------------------------------------------------------------------
+
+UCLASS()
+class ADVANCEDUI_API UListDataObject_StringInteger : public UListDataObject_String
+{
+	GENERATED_BODY()
+	
+public:
+	void AddIntegerOption(int32 Value, const FText& DisplayText);
+
+protected:
+	virtual void OnDataObjectInitialized() override;
+	virtual void OnDependencyObjectWasModified(UListDataObjectBase* ModifiedDependencyObject, EOptionsListDataModifyReason ModifyReason) override;
+private:
+	const FString TrueString = TEXT("true");
+	const FString FalseString = TEXT("false");
 };

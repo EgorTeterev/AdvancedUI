@@ -31,6 +31,8 @@ private:
 	virtual bool CanResetBackToDefaultValue() const override;
 	virtual bool TryResetBackToDefaultValue() override;
 
+	virtual void OnDependencyObjectWasModified(UListDataObjectBase* ModifiedDependencyObject, EOptionsListDataModifyReason ModifyReason);
+
 	float StringToFloat(const FString& String) const;
 	TRange<float> DisplayValueRange = TRange<float>(0.f,1.f);
 	TRange<float> OutputValueRange = TRange<float>(0.f, 1.f);
