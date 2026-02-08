@@ -196,6 +196,9 @@ void UOptionsDataRegistry::InitVideoTab()
 	VideoOptionsCollection->SetDataID(FName("VideoOptionsCollection"));
 	VideoOptionsCollection->SetDataDisplayName(FText::FromString(TEXT("Video")));
 
+	
+	UListDataObject_StringEnum* WindowMode = NewObject<UListDataObject_StringEnum>();
+	WindowMode->SetDataID(FName("WindowMode"));
 
 	//Display Category
 	{
@@ -214,23 +217,21 @@ void UOptionsDataRegistry::InitVideoTab()
 				return bIsPackagd;
 			}
 		);
+
 		PackagedBuildOnlyCondition.SetDisableRichReason(TEXT("\n\n<Disabled>This settings can only be adjusted in a packaged buld.</>"));
 
-		UListDataObject_StringEnum* CachedWindowMode = nullptr;
 		{
-			UListDataObject_StringEnum* WindowMode = NewObject<UListDataObject_StringEnum>();
-			WindowMode->SetDataID(FName("WindowMode"));
 			WindowMode->SetDataDisplayName(FText::FromString(TEXT("Window Mode")));
 			WindowMode->SetDescriptionRichText(FText::FromString(TEXT("Change window mode")));
 			WindowMode->AddEnumOption(EWindowMode::Fullscreen,FText::FromString(TEXT("Fullscreen")));
 			WindowMode->AddEnumOption(EWindowMode::WindowedFullscreen, FText::FromString(TEXT("Borderless")));
 			WindowMode->AddEnumOption(EWindowMode::Windowed, FText::FromString(TEXT("Windowed")));
 			WindowMode->SetDefaultEnumValue(EWindowMode::WindowedFullscreen); 
+
 			WindowMode->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetFullscreenMode));
 			WindowMode->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetFullscreenMode));
-			WindowMode->SetShouldApplyChangeSettingsImmediatly(true);
 
-			CachedWindowMode = WindowMode;
+			WindowMode->SetShouldApplyChangeSettingsImmediatly(true);
 
 			WindowMode->AddEditCondition(PackagedBuildOnlyCondition);
 			DisplayCategoryCollection->AddChildList(WindowMode);
@@ -243,15 +244,17 @@ void UOptionsDataRegistry::InitVideoTab()
 			ScreenResolution->SetDataDisplayName(FText::FromString(TEXT("Screen Resolution")));
 			ScreenResolution->SetDescriptionRichText(FText::FromString(TEXT("Change screen resolution")));
 			ScreenResolution->InitResolutionValues();
+
 			ScreenResolution->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetScreenResolution));
 			ScreenResolution->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetScreenResolution));
+
 			ScreenResolution->SetShouldApplyChangeSettingsImmediatly(true);
 
 			FOptionDataEditConditionDescriptor NonBorderlessWindowEditCondition;
 			NonBorderlessWindowEditCondition.SetEditCondition(
-				[CachedWindowMode]()->bool
+				[WindowMode]()->bool
 				{
-					const bool bIsBorderless = CachedWindowMode->GetCurrentValueAsEnum<EWindowMode::Type>() == EWindowMode::Type::WindowedFullscreen;
+					const bool bIsBorderless = WindowMode->GetCurrentValueAsEnum<EWindowMode::Type>() == EWindowMode::Type::WindowedFullscreen;
 
 					return !bIsBorderless;
 				}
@@ -262,7 +265,7 @@ void UOptionsDataRegistry::InitVideoTab()
 			ScreenResolution->AddEditCondition(PackagedBuildOnlyCondition);
 			ScreenResolution->AddEditCondition(NonBorderlessWindowEditCondition);
 
-			ScreenResolution->AddEditDependencyObject(CachedWindowMode);
+			ScreenResolution->AddEditDependencyObject(WindowMode);
 
 
 			DisplayCategoryCollection->AddChildList(ScreenResolution);
@@ -287,8 +290,10 @@ void UOptionsDataRegistry::InitVideoTab()
 			DisplayGamma->SetOutputValueRange(TRange<float>(1.7f,2.7f)); // Unreal engine default value is 2.2.
 			DisplayGamma->SetDisplayNumericType(ECommonNumericType::Percentage);
 			DisplayGamma->SetNumberFormattingOptions(UListDataObject_Scalar::NoDecimal());
+
 			DisplayGamma->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetCurrentDisplayGamma));
 			DisplayGamma->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetCurrentDisplayGamma));
+
 			DisplayGamma->SetDefaultValueFromString(LexToString(2.2f));
 
 			GraphicsCategoryCollection->AddChildList(DisplayGamma);
@@ -303,7 +308,7 @@ void UOptionsDataRegistry::InitVideoTab()
 			OverallQuality->SetDataDisplayName(FText::FromString(TEXT("Overall Quality")));
 			OverallQuality->SetDescriptionRichText(FText::FromString(TEXT("Changes other quality options.")));
 			OverallQuality->AddIntegerOption(0,FText::FromString(TEXT("Low")));
-			OverallQuality->AddIntegerOption(1,FText::FromString(TEXT("Mid")));
+			OverallQuality->AddIntegerOption(1,FText::FromString(TEXT("Medium")));
 			OverallQuality->AddIntegerOption(2,FText::FromString(TEXT("High")));
 			OverallQuality->AddIntegerOption(3,FText::FromString(TEXT("Epic")));
 			OverallQuality->AddIntegerOption(4,FText::FromString(TEXT("Cinema")));
@@ -347,7 +352,7 @@ void UOptionsDataRegistry::InitVideoTab()
 			GlobalIlluminationQuality->SetDataDisplayName(FText::FromString(TEXT("Overall Quality")));
 			GlobalIlluminationQuality->SetDescriptionRichText(FText::FromString(TEXT("Global illumination.")));
 			GlobalIlluminationQuality->AddIntegerOption(0, FText::FromString(TEXT("Low")));
-			GlobalIlluminationQuality->AddIntegerOption(1, FText::FromString(TEXT("Mid")));
+			GlobalIlluminationQuality->AddIntegerOption(1, FText::FromString(TEXT("Medium")));
 			GlobalIlluminationQuality->AddIntegerOption(2, FText::FromString(TEXT("High")));
 			GlobalIlluminationQuality->AddIntegerOption(3, FText::FromString(TEXT("Epic")));
 			GlobalIlluminationQuality->AddIntegerOption(4, FText::FromString(TEXT("Cinema")));
@@ -371,7 +376,7 @@ void UOptionsDataRegistry::InitVideoTab()
 			ShadowQuality->SetDataDisplayName(FText::FromString(TEXT("Shadow Quality")));
 			ShadowQuality->SetDescriptionRichText(FText::FromString(TEXT("Shadow quality.")));
 			ShadowQuality->AddIntegerOption(0, FText::FromString(TEXT("Low")));
-			ShadowQuality->AddIntegerOption(1, FText::FromString(TEXT("Mid")));
+			ShadowQuality->AddIntegerOption(1, FText::FromString(TEXT("Medium")));
 			ShadowQuality->AddIntegerOption(2, FText::FromString(TEXT("High")));
 			ShadowQuality->AddIntegerOption(3, FText::FromString(TEXT("Epic")));
 			ShadowQuality->AddIntegerOption(4, FText::FromString(TEXT("Cinema")));
@@ -395,7 +400,7 @@ void UOptionsDataRegistry::InitVideoTab()
 			AntiAliasingQuality->SetDataDisplayName(FText::FromString(TEXT("Anti-AliasingQuality")));
 			AntiAliasingQuality->SetDescriptionRichText(FText::FromString(TEXT("Anti Aliasing Quality.")));
 			AntiAliasingQuality->AddIntegerOption(0, FText::FromString(TEXT("Low")));
-			AntiAliasingQuality->AddIntegerOption(1, FText::FromString(TEXT("Mid")));
+			AntiAliasingQuality->AddIntegerOption(1, FText::FromString(TEXT("Medium")));
 			AntiAliasingQuality->AddIntegerOption(2, FText::FromString(TEXT("High")));
 			AntiAliasingQuality->AddIntegerOption(3, FText::FromString(TEXT("Epic")));
 			AntiAliasingQuality->AddIntegerOption(4, FText::FromString(TEXT("Cinema")));
@@ -411,8 +416,195 @@ void UOptionsDataRegistry::InitVideoTab()
 			GraphicsCategoryCollection->AddChildList(AntiAliasingQuality);
 		}
 
+		//View Distance Quality
+		{
+			UListDataObject_StringInteger* ViewDistanceQuality = NewObject<UListDataObject_StringInteger>();
+			ViewDistanceQuality->SetDataID(FName("ViewDistanceQuality"));
+
+			ViewDistanceQuality->SetDataDisplayName(FText::FromString(TEXT("View Distance Quality")));
+			ViewDistanceQuality->SetDescriptionRichText(FText::FromString(TEXT("View Distance Quality.")));
+			ViewDistanceQuality->AddIntegerOption(0, FText::FromString(TEXT("Near")));
+			ViewDistanceQuality->AddIntegerOption(1, FText::FromString(TEXT("Medium")));
+			ViewDistanceQuality->AddIntegerOption(2, FText::FromString(TEXT("Far")));
+			ViewDistanceQuality->AddIntegerOption(3, FText::FromString(TEXT("Very far")));
+			ViewDistanceQuality->AddIntegerOption(4, FText::FromString(TEXT("Cinema")));
+
+			ViewDistanceQuality->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetViewDistanceQuality));
+			ViewDistanceQuality->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetViewDistanceQuality));
+
+			ViewDistanceQuality->SetShouldApplyChangeSettingsImmediatly(true);
+
+			ViewDistanceQuality->AddEditDependencyObject(OverallQuality);
+			OverallQuality->AddEditDependencyObject(ViewDistanceQuality);
+
+			GraphicsCategoryCollection->AddChildList(ViewDistanceQuality);
+		}
+
+		//Texture Quality
+		{
+			UListDataObject_StringInteger* TextureQuality = NewObject<UListDataObject_StringInteger>();
+			TextureQuality->SetDataID(FName("TextureQuality"));
+
+			TextureQuality->SetDataDisplayName(FText::FromString(TEXT("Texture Quality")));
+			TextureQuality->SetDescriptionRichText(FText::FromString(TEXT("Texture Quality.")));
+			TextureQuality->AddIntegerOption(0, FText::FromString(TEXT("Low")));
+			TextureQuality->AddIntegerOption(1, FText::FromString(TEXT("Medium")));
+			TextureQuality->AddIntegerOption(2, FText::FromString(TEXT("High")));
+			TextureQuality->AddIntegerOption(3, FText::FromString(TEXT("Epic")));
+			TextureQuality->AddIntegerOption(4, FText::FromString(TEXT("Cinema")));
+
+			TextureQuality->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetTextureQuality));
+			TextureQuality->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetTextureQuality));
+
+			TextureQuality->SetShouldApplyChangeSettingsImmediatly(true);
+
+			TextureQuality->AddEditDependencyObject(OverallQuality);
+			OverallQuality->AddEditDependencyObject(TextureQuality);
+
+			GraphicsCategoryCollection->AddChildList(TextureQuality);
+		}
+
+		//VFX
+		{
+			UListDataObject_StringInteger* VisualEffectQuality = NewObject<UListDataObject_StringInteger>();
+			VisualEffectQuality->SetDataID(FName("VisualEffectQuality"));
+
+			VisualEffectQuality->SetDataDisplayName(FText::FromString(TEXT("VFX Quality")));
+			VisualEffectQuality->SetDescriptionRichText(FText::FromString(TEXT("VFX Quality.")));
+			VisualEffectQuality->AddIntegerOption(0, FText::FromString(TEXT("Low")));
+			VisualEffectQuality->AddIntegerOption(1, FText::FromString(TEXT("Medium")));
+			VisualEffectQuality->AddIntegerOption(2, FText::FromString(TEXT("High")));
+			VisualEffectQuality->AddIntegerOption(3, FText::FromString(TEXT("Epic")));
+			VisualEffectQuality->AddIntegerOption(4, FText::FromString(TEXT("Cinema")));
+
+			VisualEffectQuality->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetVisualEffectQuality));
+			VisualEffectQuality->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetVisualEffectQuality));
+
+			VisualEffectQuality->SetShouldApplyChangeSettingsImmediatly(true);
+
+			VisualEffectQuality->AddEditDependencyObject(OverallQuality);
+			OverallQuality->AddEditDependencyObject(VisualEffectQuality);
+
+			GraphicsCategoryCollection->AddChildList(VisualEffectQuality);
+		}
+
+		//Reflection Quality
+		{
+			UListDataObject_StringInteger* ReflectionQuality = NewObject<UListDataObject_StringInteger>();
+			ReflectionQuality->SetDataID(FName("ReflectionQuality"));
+
+			ReflectionQuality->SetDataDisplayName(FText::FromString(TEXT("Reflection quality")));
+			ReflectionQuality->SetDescriptionRichText(FText::FromString(TEXT("Changes reflection quality.")));
+			ReflectionQuality->AddIntegerOption(0, FText::FromString(TEXT("Low")));
+			ReflectionQuality->AddIntegerOption(1, FText::FromString(TEXT("Medium")));
+			ReflectionQuality->AddIntegerOption(2, FText::FromString(TEXT("High")));
+			ReflectionQuality->AddIntegerOption(3, FText::FromString(TEXT("Epic")));
+			ReflectionQuality->AddIntegerOption(4, FText::FromString(TEXT("Cinema")));
+
+			ReflectionQuality->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetReflectionQuality));
+			ReflectionQuality->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetReflectionQuality));
+
+			ReflectionQuality->SetShouldApplyChangeSettingsImmediatly(true);
+
+			ReflectionQuality->AddEditDependencyObject(OverallQuality);
+			OverallQuality->AddEditDependencyObject(ReflectionQuality);
+
+			GraphicsCategoryCollection->AddChildList(ReflectionQuality);
+		}
+
+		//Post Processing Quality
+		{
+			UListDataObject_StringInteger* PostProcessingQuality = NewObject<UListDataObject_StringInteger>();
+			PostProcessingQuality->SetDataID(FName("PostProcessingQuality"));
+
+			PostProcessingQuality->SetDataDisplayName(FText::FromString(TEXT("Reflection quality")));
+			PostProcessingQuality->SetDescriptionRichText(FText::FromString(TEXT("Changes reflection quality.")));
+			PostProcessingQuality->AddIntegerOption(0, FText::FromString(TEXT("Low")));
+			PostProcessingQuality->AddIntegerOption(1, FText::FromString(TEXT("Medium")));
+			PostProcessingQuality->AddIntegerOption(2, FText::FromString(TEXT("High")));
+			PostProcessingQuality->AddIntegerOption(3, FText::FromString(TEXT("Epic")));
+			PostProcessingQuality->AddIntegerOption(4, FText::FromString(TEXT("Cinematic")));
+
+			PostProcessingQuality->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetPostProcessingQuality));
+			PostProcessingQuality->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetPostProcessingQuality));
+
+			PostProcessingQuality->SetShouldApplyChangeSettingsImmediatly(true);
+
+			PostProcessingQuality->AddEditDependencyObject(OverallQuality);
+			OverallQuality->AddEditDependencyObject(PostProcessingQuality);
+
+			GraphicsCategoryCollection->AddChildList(PostProcessingQuality);
+		}
+	}
+
+	//Advanced
+	{
+		UListDataObjectCollection* AdvancedCategoryCollection = NewObject<UListDataObjectCollection>();
+		AdvancedCategoryCollection->SetDataID(FName("AdvancedCategoryCollection"));
+		AdvancedCategoryCollection->SetDataDisplayName(FText::FromString(TEXT("Advanced")));
+
+		VideoOptionsCollection->AddChildList(AdvancedCategoryCollection);
+
+		//Vertical Sync
+		{
+			UListDataObject_StringBool* VerticalSync = NewObject<UListDataObject_StringBool>();
+			VerticalSync->SetDataID(FName("VertycalSync"));
+			VerticalSync->SetDataDisplayName(FText::FromString(TEXT("V-Sync")));
+			VerticalSync->SetDescriptionRichText(FText::FromString(TEXT("Sets vertical synchronization.")));
+
+			VerticalSync->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(IsVSyncEnabled));
+			VerticalSync->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetVSyncEnabled));
+
+			VerticalSync->SetFalseAsDefault();
+			VerticalSync->SetShouldApplyChangeSettingsImmediatly(true);
+ 
+			FOptionDataEditConditionDescriptor FullscreenOnlyCondition;
+
+			FullscreenOnlyCondition.SetEditCondition(
+				[WindowMode]()->bool
+				{
+					return WindowMode->GetCurrentValueAsEnum<EWindowMode::Type>() == EWindowMode::Type::Fullscreen;
+				}
+			);
+
+			FullscreenOnlyCondition.SetDisableRichReason(TEXT("\n\n<Disabled>This feature only works in Fullscreen window mode.</>"));
+			FullscreenOnlyCondition.SetDisabledForcedStringValue(TEXT("False"));
+
+			VerticalSync->AddEditCondition(FullscreenOnlyCondition);
+
+			AdvancedCategoryCollection->AddChildList(VerticalSync);
+
+		}
+
+		//Frame Rate Limit
+		{
+			UListDataObject_String* FrameRateLimit = NewObject<UListDataObject_String>();
+			FrameRateLimit->SetDataID(FName("FrameRateLimit"));
+			FrameRateLimit->SetDataDisplayName(FText::FromString(TEXT("Frame Rate Limit")));
+			FrameRateLimit->SetDescriptionRichText(FText::FromString(TEXT("Sets FPS limit.")));
+
+			FrameRateLimit->AddDynamicOption(LexToString(30.0f), FText::FromString(TEXT("30 FPS")));
+			FrameRateLimit->AddDynamicOption(LexToString(60.0f), FText::FromString(TEXT("60 FPS")));
+			FrameRateLimit->AddDynamicOption(LexToString(90.0f), FText::FromString(TEXT("90 FPS")));
+			FrameRateLimit->AddDynamicOption(LexToString(120.0f), FText::FromString(TEXT("120 FPS")));
+			FrameRateLimit->AddDynamicOption(LexToString(144.0f), FText::FromString(TEXT("144 FPS")));
+			FrameRateLimit->AddDynamicOption(LexToString(165.0f), FText::FromString(TEXT("165 FPS")));
+			FrameRateLimit->AddDynamicOption(LexToString(240.0f), FText::FromString(TEXT("240 FPS")));
+			FrameRateLimit->AddDynamicOption(LexToString(0.0f), FText::FromString(TEXT("No limit")));
+			FrameRateLimit->SetDefaultValueFromString(LexToString(0.0f));
+
+			FrameRateLimit->SetDataDynamicGetter(MAKE_OPTIONS_DATA_CONTROL(GetFrameRateLimit));
+			FrameRateLimit->SetDataDynamicSetter(MAKE_OPTIONS_DATA_CONTROL(SetFrameRateLimit));
+
+			FrameRateLimit->SetShouldApplyChangeSettingsImmediatly(true);
+
+			AdvancedCategoryCollection->AddChildList(FrameRateLimit);
+
+		}
 
 	}
+
+
 
 	RegisteredOptionsTabCollections.Add(VideoOptionsCollection);
 }

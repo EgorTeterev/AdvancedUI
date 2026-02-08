@@ -54,7 +54,7 @@ void UListEntryString::OnPreviousOptionButtonClicked()
 {
 	if (CachedStringDataObject)
 	{
-		CachedStringDataObject->SwitchToNextOption();
+		CachedStringDataObject->SwitchToPreviousOption();
 	}
 
 	SelectThisEntryWidget();
@@ -64,7 +64,7 @@ void UListEntryString::OnNextOptionButtonClicked()
 {
 	if (CachedStringDataObject)
 	{
-		CachedStringDataObject->SwitchToPreviousOption();
+		CachedStringDataObject->SwitchToNextOption();
 	}
 
 	SelectThisEntryWidget();
