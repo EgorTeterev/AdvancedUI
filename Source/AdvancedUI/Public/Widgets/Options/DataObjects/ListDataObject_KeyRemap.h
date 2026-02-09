@@ -26,8 +26,11 @@ public:
 	);
 
 
+	FSlateBrush GetIconFromCurrentKey() const;
 
 private:
+	FPlayerKeyMapping* GetOwningKeyMapping() const;
+
 	UPROPERTY(Transient)
 	UEnhancedInputUserSettings* CachedOwningInputUserSettings;
 
@@ -36,7 +39,7 @@ private:
 
 	ECommonInputType CachedDesiredInputKeyType;
 
-	FName OwningMappingName;
+	FName CachedOwningMappingName;
 
 	EPlayerMappableKeySlot CachedOwningKeySlot;
 };

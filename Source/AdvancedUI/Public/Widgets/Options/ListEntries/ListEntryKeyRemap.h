@@ -7,6 +7,7 @@
 #include "ListEntryKeyRemap.generated.h"
 
 class UFrontendCommonButtonBase;
+class UListDataObject_KeyRemap;
 /**
  * 
  */
@@ -21,4 +22,9 @@ private:
 
 	UPROPERTY(BlueprintReadOnly,meta = (BindWidget, AllowPrivateAccess = "true"))
 	UFrontendCommonButtonBase* CommonButtonKeyReset;
+
+	virtual void OnOwningListDataObjectSet(UListDataObjectBase* OwningListDataObject);
+	virtual void OnOwningListDataObjectModified(UListDataObjectBase* OwningModifiedData, EOptionsListDataModifyReason ModifyReason);
+
+	UListDataObject_KeyRemap* CachedRemapObject;
 };
