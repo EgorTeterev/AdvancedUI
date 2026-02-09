@@ -27,7 +27,7 @@ private:
 	void InitGameplayTab();
 	void InitAudioTab();
 	void InitVideoTab();
-	void InitControlTab();
+	void InitControlTab(ULocalPlayer* OwningPlayer);
 
 	void FindChildListDataRecursively(UListDataObjectBase* ObjectToSearch,TArray<UListDataObjectBase*>& OutFoundChilds) const;
 	UPROPERTY(Transient)
