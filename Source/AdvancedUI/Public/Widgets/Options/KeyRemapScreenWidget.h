@@ -20,6 +20,12 @@ class ADVANCEDUI_API UKeyRemapScreenWidget : public UAdvancedActivatableWidget
 public:
 	void SetDesiredInputType(ECommonInputType DesiredInputType) {CachedDesiredInputType = DesiredInputType;}
 
+	DECLARE_DELEGATE_OneParam(FOnKeyRemapScreenKeyPressedDelegate, const FKey&);
+	FOnKeyRemapScreenKeyPressedDelegate OnKeyRemapScreenKeyPressed;
+
+	DECLARE_DELEGATE_OneParam(FOnKeyRemapScreenKeySelectionCanceledDelegate, const FString&);
+	FOnKeyRemapScreenKeySelectionCanceledDelegate OnKeyRemapScreenKeySelectionCanceled;
+
 protected:
 	virtual void NativeOnActivated() override;
 	virtual void NativeOnDeactivated() override;
@@ -31,4 +37,12 @@ private:
 	TSharedPtr<FkeyRemapInputPreprocessor> CachedPreprocessor;
 
 	ECommonInputType CachedDesiredInputType;
+
+	void OnValidKeyPressed(const FKey& PressedKey);
+	void OnInvalidKeyPressed(const FString& CancelReason);
+
+	//Delay a tick to make sure that the input key is captured properly
+	void RequestDeactivateWidget(TFunction<void()> PreDeactivateCallback);
+
+
 };
