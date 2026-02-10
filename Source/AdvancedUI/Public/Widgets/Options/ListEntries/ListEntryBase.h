@@ -25,12 +25,18 @@ public:
 
 protected:
 	//Child widget blueprint should override this function for the gamepad interaction
-	UFUNCTION(BlueprintImplementableEvent,meta = (DisplayName = "Get Widget To Focus For Gamepad"))
+	UFUNCTION(BlueprintImplementableEvent,meta = (DisplayName = "On Toggle Enry Widget Highlight State"))
+	void BP_OnToggleEntryWidgetHighlighState(bool bShouldHighlight) const;
+
+	//Child widget blueprint should override this function for the gamepad interaction
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "Get Widget To Focus For Gamepad"))
 	UWidget* BP_GetWidgetToFocusForGamepad() const;
 
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
 	virtual void NativeOnEntryReleased() override;
+	virtual void NativeOnItemSelectionChanged(bool bIsSelected) override;
 	virtual FReply NativeOnFocusReceived(const FGeometry& InGeometry, const FFocusEvent& InFocusEvent) override;
+
 	//The child widget class can override this function to handle initialization.
 	virtual void OnOwningListDataObjectSet(UListDataObjectBase* OwningListDataObject);
 

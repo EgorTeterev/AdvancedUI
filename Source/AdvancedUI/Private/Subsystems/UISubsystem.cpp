@@ -80,9 +80,11 @@ void UUISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& WidgetStackTag
 	typedef UCommonActivatableWidgetContainerBase WidgetStack;
 
 	check(!SoftWidgetClass.IsNull());
-	UAssetManager::Get().GetStreamableManager().RequestAsyncLoad(
+	UAssetManager::Get().GetStreamableManager().RequestAsyncLoad
+	(
 		SoftWidgetClass.ToSoftObjectPath(),
-		FStreamableDelegate::CreateLambda(
+		FStreamableDelegate::CreateLambda
+		(
 			[SoftWidgetClass, WidgetStackTag, ASyncPushStateCallback, this]()
 			{
 				UClass* LoadedWidgetClass = SoftWidgetClass.Get();

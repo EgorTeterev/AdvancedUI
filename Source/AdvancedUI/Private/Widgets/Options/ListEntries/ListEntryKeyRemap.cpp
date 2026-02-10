@@ -3,7 +3,19 @@
 
 #include "Widgets/Options/ListEntries/ListEntryKeyRemap.h"
 #include "Widgets/Components/FrontendCommonButtonBase.h"
+#include "Subsystems/UISubsystem.h"
+#include "Tags/UIGameplayTags.h"
+#include "FrontendFunctionLibrary.h"
+#include "Widgets/Options/KeyRemapScreenWidget.h"
 #include "Widgets/Options/DataObjects/ListDataObject_KeyRemap.h"
+
+
+void UListEntryKeyRemap::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+	CommonButtonKeyRemap->OnClicked().AddUObject(this,&ThisClass::OnRemapKeyButtonClicked);
+	CommonButtonKeyReset->OnClicked().AddUObject(this, &ThisClass::OnResetKeyBindingButtonClicked);
+}
 
 void UListEntryKeyRemap::OnOwningListDataObjectSet(UListDataObjectBase* OwningListDataObject)
 {
@@ -19,4 +31,29 @@ void UListEntryKeyRemap::OnOwningListDataObjectModified(UListDataObjectBase* Own
 	{
 		CommonButtonKeyRemap->SetButtonDisplayImage(CachedRemapObject->GetIconFromCurrentKey());
 	}
+}
+
+void UListEntryKeyRemap::OnRemapKeyButtonClicked()
+{
+	UUISubsystem::Get(this)->PushSoftWidgetToStackAsync(
+		UIGameplayTags::UI_WidgetStack_Modal,
+		UFrontendFunctionLibrary::GetFrontendSoftWidgetClassByTag(UIGameplayTags::UI_Widget_KeyRemapScreen),
+		[this](EAsyncPushWidgetState PushState, UAdvancedActivatableWidget* PushedWidget)
+		{
+			if (PushState == EAsyncPushWidgetState::OnCreatedBeforePush)
+			{
+				UKeyRemapScreenWidget* CreatedKeyRemapScreen = CastChecked<UKeyRemapScreenWidget>(PushedWidget);
+
+				if (CachedRemapObject)
+				{
+					CreatedKeyRemapScreen->SetDesiredInputType(CachedRemapObject->GetDesiredInputKeyType());
+				}
+
+			}
+		}
+	);
+}
+
+void UListEntryKeyRemap::OnResetKeyBindingButtonClicked()
+{
 }

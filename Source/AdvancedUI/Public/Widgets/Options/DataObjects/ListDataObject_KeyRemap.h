@@ -25,6 +25,8 @@ public:
 		ECommonInputType DesiredInputKeyType, const FPlayerKeyMapping& OwningPlayerKeyMapping
 	);
 
+	ECommonInputType GetDesiredInputKeyType() const { return CachedDesiredInputKeyType; }
+
 
 	FSlateBrush GetIconFromCurrentKey() const;
 

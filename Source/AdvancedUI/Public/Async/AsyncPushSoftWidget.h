@@ -17,9 +17,13 @@ class ADVANCEDUI_API UAsyncPushSoftWidget : public UBlueprintAsyncActionBase
 	
 public:
 	UFUNCTION(BlueprintCallable,meta=(WorldContext = "WorldContext",HidePin = "WorldContext",BlueprintInternalUseOnly = "true",DisplayName="PushSoftWidgetToWidgetStack"))
-	static UAsyncPushSoftWidget* PushSoftWidget(const UObject* WorldContext, APlayerController* OwningPC,
+	static UAsyncPushSoftWidget* PushSoftWidget(
+		const UObject* WorldContext,
+		APlayerController* OwningPC,
 		TSoftClassPtr<UAdvancedActivatableWidget>WidgetClass,
-		UPARAM(meta = (Categories = "UI.WidgetStack")) FGameplayTag WidgetStackTag, bool FocusPushedWidget = true);
+		UPARAM(meta = (Categories = "UI.WidgetStack")) FGameplayTag WidgetStackTag,
+		bool FocusPushedWidget = true
+	);
 	
 	//~Begin UBlueprintAsyncActionBase interface
 	virtual void Activate() override;

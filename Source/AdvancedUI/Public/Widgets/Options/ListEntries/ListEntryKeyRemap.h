@@ -16,6 +16,11 @@ class ADVANCEDUI_API UListEntryKeyRemap : public UListEntryBase
 {
 	GENERATED_BODY()
 	
+protected:
+	virtual void NativeOnInitialized() override;
+	virtual void OnOwningListDataObjectSet(UListDataObjectBase* OwningListDataObject);
+	virtual void OnOwningListDataObjectModified(UListDataObjectBase* OwningModifiedData, EOptionsListDataModifyReason ModifyReason);
+
 private:
 	UPROPERTY(BlueprintReadOnly,meta = (BindWidget,AllowPrivateAccess = "true"))
 	UFrontendCommonButtonBase* CommonButtonKeyRemap;
@@ -23,8 +28,8 @@ private:
 	UPROPERTY(BlueprintReadOnly,meta = (BindWidget, AllowPrivateAccess = "true"))
 	UFrontendCommonButtonBase* CommonButtonKeyReset;
 
-	virtual void OnOwningListDataObjectSet(UListDataObjectBase* OwningListDataObject);
-	virtual void OnOwningListDataObjectModified(UListDataObjectBase* OwningModifiedData, EOptionsListDataModifyReason ModifyReason);
-
 	UListDataObject_KeyRemap* CachedRemapObject;
+
+	void OnRemapKeyButtonClicked();
+	void OnResetKeyBindingButtonClicked();
 };

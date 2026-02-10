@@ -15,7 +15,7 @@ namespace UIGameplayTags
 	ADVANCEDUI_API UE_DEFINE_GAMEPLAY_TAG(UI_Widget_PressAnyKeyScreen, "UI.Widget.PressAnyKeyScreen");
 	ADVANCEDUI_API UE_DEFINE_GAMEPLAY_TAG(UI_Widget_MainMenuScreen, "UI.Widget.MainMenuScreen");
 	ADVANCEDUI_API UE_DEFINE_GAMEPLAY_TAG(UI_Widget_ConfirmScreen, "UI.Widget.ConfirmScreen");
-	ADVANCEDUI_API UE_DEFINE_GAMEPLAY_TAG(UI_Widget_OptionsScreen, "UI.Widget.OptionsScreen");
+	ADVANCEDUI_API UE_DEFINE_GAMEPLAY_TAG(UI_Widget_KeyRemapScreen, "UI.Widget.KeyRemapScreen");
 
 	//Options soft images
 	ADVANCEDUI_API UE_DEFINE_GAMEPLAY_TAG(UI_Image_TestImage, "UI.Image.TestImage");

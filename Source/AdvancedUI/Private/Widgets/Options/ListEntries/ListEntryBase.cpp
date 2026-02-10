@@ -38,6 +38,29 @@ FReply UListEntryBase::NativeOnFocusReceived(const FGeometry& InGeometry, const 
 void UListEntryBase::NativeOnListEntryWidgetHovered(bool bWasHovered)
 {
 	BP_OnListEntryWidgetHovered(bWasHovered, IsListItemSelected());
+
+	if (bWasHovered)
+	{
+		BP_OnToggleEntryWidgetHighlighState(true);
+	}
+	else
+	{
+		BP_OnToggleEntryWidgetHighlighState(GetListItem() && IsListItemSelected() ? true : false);
+	}
+}
+
+void UListEntryBase::NativeOnEntryReleased()
+{
+	IUserObjectListEntry::NativeOnEntryReleased();
+
+	NativeOnListEntryWidgetHovered(false);
+}
+
+void UListEntryBase::NativeOnItemSelectionChanged(bool bIsSelected)
+{
+	IUserObjectListEntry::NativeOnItemSelectionChanged(bIsSelected);
+
+	BP_OnToggleEntryWidgetHighlighState(bIsSelected);
 }
 
 void UListEntryBase::OnOwningListDataObjectSet(UListDataObjectBase* OwningListDataObject)
@@ -85,11 +108,4 @@ void UListEntryBase::OnToggleEditableState(bool bIsEditable)
 void UListEntryBase::SelectThisEntryWidget()
 {
 	CastChecked<UListView>(GetOwningListView())->SetSelectedItem(GetListItem());
-}
-
-void UListEntryBase::NativeOnEntryReleased()
-{
-	IUserObjectListEntry::NativeOnEntryReleased();
-
-	NativeOnListEntryWidgetHovered(false);
 }
