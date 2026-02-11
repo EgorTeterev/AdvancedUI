@@ -9,6 +9,8 @@
 #include "Widgets/Options/KeyRemapScreenWidget.h"
 #include "Widgets/Options/DataObjects/ListDataObject_KeyRemap.h"
 
+#include "DebugHelper.h"
+
 
 void UListEntryKeyRemap::NativeOnInitialized()
 {
@@ -43,6 +45,8 @@ void UListEntryKeyRemap::OnRemapKeyButtonClicked()
 			if (PushState == EAsyncPushWidgetState::OnCreatedBeforePush)
 			{
 				UKeyRemapScreenWidget* CreatedKeyRemapScreen = CastChecked<UKeyRemapScreenWidget>(PushedWidget);
+				CreatedKeyRemapScreen->OnKeyRemapScreenKeyPressed.BindUObject(this, &ThisClass::OnKeyToRemapPressed);
+				CreatedKeyRemapScreen->OnKeyRemapScreenKeySelectionCanceled.BindUObject(this, &ThisClass::OnKeyRemapCanceled);
 
 				if (CachedRemapObject)
 				{
@@ -56,4 +60,24 @@ void UListEntryKeyRemap::OnRemapKeyButtonClicked()
 
 void UListEntryKeyRemap::OnResetKeyBindingButtonClicked()
 {
+
+}
+
+void UListEntryKeyRemap::OnKeyToRemapPressed(const FKey& PressedKey)
+{
+
+}
+
+void UListEntryKeyRemap::OnKeyRemapCanceled(const FString& CanceledReason)
+{
+	UUISubsystem::Get(this)->PushConfirmScreenToModalStackAsync(
+		EConfirmScreenType::Ok,
+		FText::FromString(TEXT("Selection canceled")),
+		FText::FromString(CanceledReason),
+		[](EConfirmScreenButtonType ClickedButton)
+		{
+			AUIDebug::ConsoleMessage(TEXT("лллллллл "));
+
+		}
+	);
 }

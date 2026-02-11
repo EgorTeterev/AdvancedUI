@@ -43,6 +43,6 @@ private:
 
 	//Delay a tick to make sure that the input key is captured properly
 	void RequestDeactivateWidget(TFunction<void()> PreDeactivateCallback);
-
+	void RequestDeactivateWidgetTest(TFunction<void()> PreDeactivateCallback);
 
 };
