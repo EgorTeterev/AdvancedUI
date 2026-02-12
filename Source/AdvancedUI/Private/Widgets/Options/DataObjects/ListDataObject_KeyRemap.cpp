@@ -42,6 +42,23 @@ FSlateBrush UListDataObject_KeyRemap::GetIconFromCurrentKey() const
 	return Brush;
 }
 
+void UListDataObject_KeyRemap::BindNewInputKey(const FKey& NewKey)
+{
+	check(CachedOwningInputUserSettings);
+
+	FMapPlayerKeyArgs KeyArgs;
+	KeyArgs.MappingName = CachedOwningMappingName;
+	KeyArgs.Slot = CachedOwningKeySlot;
+	KeyArgs.NewKey = NewKey;
+
+	FGameplayTagContainer TagContainer;
+
+	CachedOwningInputUserSettings->MapPlayerKey(KeyArgs, TagContainer);
+	CachedOwningInputUserSettings->SaveSettings();
+
+	NotifyListDataModified(this);
+}
+
 FPlayerKeyMapping* UListDataObject_KeyRemap::GetOwningKeyMapping() const
 {
 	check(CachedOwningPlayerMappableKeyProfile);

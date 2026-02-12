@@ -143,8 +143,6 @@ void UKeyRemapScreenWidget::OnInvalidKeyPressed(const FString& CancelReason)
 
 void UKeyRemapScreenWidget::RequestDeactivateWidget(TFunction<void()> PreDeactivateCallback)
 {
-	AUIDebug::ConsoleMessage(TEXT("Detected key to remap: "));
-
 	FTSTicker::GetCoreTicker().AddTicker(
 		FTickerDelegate::CreateLambda(
 			[this, PreDeactivateCallback](float DeltaTime)->bool

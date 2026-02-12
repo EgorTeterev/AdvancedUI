@@ -65,18 +65,20 @@ void UListEntryKeyRemap::OnResetKeyBindingButtonClicked()
 
 void UListEntryKeyRemap::OnKeyToRemapPressed(const FKey& PressedKey)
 {
-
+	if (CachedRemapObject)
+	{
+		CachedRemapObject->BindNewInputKey(PressedKey);
+	}
 }
 
 void UListEntryKeyRemap::OnKeyRemapCanceled(const FString& CanceledReason)
 {
 	UUISubsystem::Get(this)->PushConfirmScreenToModalStackAsync(
 		EConfirmScreenType::Ok,
-		FText::FromString(TEXT("Selection canceled")),
+		FText::FromString(TEXT("Key remap")),
 		FText::FromString(CanceledReason),
 		[](EConfirmScreenButtonType ClickedButton)
 		{
-			AUIDebug::ConsoleMessage(TEXT("лллллллл "));
 
 		}
 	);
