@@ -37,6 +37,8 @@ void UListEntryKeyRemap::OnOwningListDataObjectModified(UListDataObjectBase* Own
 
 void UListEntryKeyRemap::OnRemapKeyButtonClicked()
 {
+	SelectThisEntryWidget();
+
 	UUISubsystem::Get(this)->PushSoftWidgetToStackAsync(
 		UIGameplayTags::UI_WidgetStack_Modal,
 		UFrontendFunctionLibrary::GetFrontendSoftWidgetClassByTag(UIGameplayTags::UI_Widget_KeyRemapScreen),
@@ -60,7 +62,14 @@ void UListEntryKeyRemap::OnRemapKeyButtonClicked()
 
 void UListEntryKeyRemap::OnResetKeyBindingButtonClicked()
 {
+	SelectThisEntryWidget();
 
+	if (!CachedRemapObject)
+	{
+		return;
+	}
+
+	CachedRemapObject->TryResetBackToDefaultValue();
 }
 
 void UListEntryKeyRemap::OnKeyToRemapPressed(const FKey& PressedKey)

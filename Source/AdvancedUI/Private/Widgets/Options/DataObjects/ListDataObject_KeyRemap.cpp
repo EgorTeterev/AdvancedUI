@@ -69,3 +69,29 @@ FPlayerKeyMapping* UListDataObject_KeyRemap::GetOwningKeyMapping() const
 	
 	return CachedOwningPlayerMappableKeyProfile->FindKeyMapping(KeyArgs);
 }
+
+bool UListDataObject_KeyRemap::HasDefaultValue() const
+{
+	return GetOwningKeyMapping()->GetDefaultKey().IsValid();
+}
+
+bool UListDataObject_KeyRemap::CanResetBackToDefaultValue() const
+{
+	return HasDefaultValue() && GetOwningKeyMapping()->IsCustomized();
+}
+
+bool UListDataObject_KeyRemap::TryResetBackToDefaultValue()
+{
+	if (CanResetBackToDefaultValue())
+	{
+		GetOwningKeyMapping()->ResetToDefault();
+
+		CachedOwningInputUserSettings->SaveSettings();
+
+		NotifyListDataModified(this,EOptionsListDataModifyReason::ResetToDefault);
+	
+		return true;
+	}
+
+	return false;
+}

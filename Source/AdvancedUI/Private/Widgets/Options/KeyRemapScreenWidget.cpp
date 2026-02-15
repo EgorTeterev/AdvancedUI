@@ -5,14 +5,18 @@
 #include "CommonRichTextBlock.h"
 #include "Framework/Application/SlateApplication.h"
 #include "Framework/Application/IInputProcessor.h"
+#include "CommonInputSubsystem.h"
+#include "ICommonInputModule.h"
+#include "CommonUITypes.h"
 #include "DebugHelper.h"
 
 class FkeyRemapInputPreprocessor : public IInputProcessor
 {
 
 public:
-	FkeyRemapInputPreprocessor(ECommonInputType InputTypeToListen)
+	FkeyRemapInputPreprocessor(ECommonInputType InputTypeToListen,ULocalPlayer* LocalPlayer)
 	:CachedInputTypeToListenTo(InputTypeToListen)
+	,CachedOwningPlayerWeak(LocalPlayer)
 	{
 
 	}
@@ -54,11 +58,17 @@ protected:
 			return;
 		}
 
+		UCommonInputSubsystem* CommonInputSubsystem = UCommonInputSubsystem::Get(CachedOwningPlayerWeak.Get());
+		check(CommonInputSubsystem);
+
+		ECommonInputType CurrentInputType = CommonInputSubsystem->GetCurrentInputType();
+
+
 		switch (CachedInputTypeToListenTo)
 		{
 		case ECommonInputType::MouseAndKeyboard:
 			
-			if (PressedKey.IsGamepadKey())
+			if (PressedKey.IsGamepadKey() || CurrentInputType == ECommonInputType::Gamepad)
 			{
 				OnInputPreProcessorKeySelectedCanceled.ExecuteIfBound(TEXT("Gamepad key pressed for keyboard option."));
 
@@ -66,7 +76,16 @@ protected:
 			}
 			break;
 		case ECommonInputType::Gamepad:
-			if (PressedKey.IsGamepadKey())
+
+			if (CurrentInputType == ECommonInputType::Gamepad && PressedKey == EKeys::LeftMouseButton)
+			{
+				FCommonInputActionDataBase* InputActionDataBase = ICommonInputModule::GetSettings().GetDefaultClickAction().GetRow<FCommonInputActionDataBase>(TEXT(""));
+
+				check(InputActionDataBase);
+
+				OnInputPreProcessorKeyPressed.ExecuteIfBound(InputActionDataBase->GetDefaultGamepadInputTypeInfo().GetKey());
+			}
+			if (!PressedKey.IsGamepadKey())
 			{
 				OnInputPreProcessorKeySelectedCanceled.ExecuteIfBound(TEXT("Keyboard key pressed for gamepad option."));
 
@@ -82,14 +101,14 @@ protected:
 
 private:
 	ECommonInputType CachedInputTypeToListenTo;
-
+	TWeakObjectPtr<ULocalPlayer> CachedOwningPlayerWeak;
 };
 
 void UKeyRemapScreenWidget::NativeOnActivated()
 {
 	Super::NativeOnActivated();
 
-	CachedPreprocessor = MakeShared<FkeyRemapInputPreprocessor>(CachedDesiredInputType);
+	CachedPreprocessor = MakeShared<FkeyRemapInputPreprocessor>(CachedDesiredInputType,GetOwningLocalPlayer());
 	CachedPreprocessor->OnInputPreProcessorKeyPressed.BindUObject(this, &ThisClass::OnValidKeyPressed);
 	CachedPreprocessor->OnInputPreProcessorKeySelectedCanceled.BindUObject(this, &ThisClass::OnInvalidKeyPressed);
 

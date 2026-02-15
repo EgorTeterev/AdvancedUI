@@ -58,8 +58,8 @@ void UOptionsScreenWidget::OnResetBoundActionTriggered()
 	//TFunction<void(EConfirmScreenButtonType)> ButtonCallback
 	UUISubsystem::Get(this)->PushConfirmScreenToModalStackAsync(
 		EConfirmScreenType::YesOrNo,
+		FText::FromString(TEXT("Are you sure you want to reset all the settings under the ") + SelectedTabButtonName + TEXT(" tab.")),
 		FText::FromString(TEXT("Reset")),
-		FText::FromString(TEXT("Are you sure you want to reset all the settings under the ")+SelectedTabButtonName +TEXT(" tab.")),
 		[this](EConfirmScreenButtonType ClickedButtonType) 
 		{
 			if (ClickedButtonType != EConfirmScreenButtonType::Confirmed)
