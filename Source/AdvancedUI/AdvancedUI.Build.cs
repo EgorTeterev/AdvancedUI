@@ -8,7 +8,7 @@ public class AdvancedUI : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "CommonUI", "UMG", "GameplayTags" ,"CommonInput","PropertyPath"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "CommonUI", "UMG", "GameplayTags" ,"CommonInput","PropertyPath","PreLoadScreen"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

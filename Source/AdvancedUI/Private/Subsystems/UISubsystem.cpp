@@ -25,7 +25,15 @@ UUISubsystem* UUISubsystem::Get(const UObject* WorldContextObject)
 
 bool UUISubsystem::ShouldCreateSubsystem(UObject* Outer) const
 {
-	return true;
+	if (!CastChecked<UGameInstance>(Outer)->IsDedicatedServerInstance())
+	{
+		TArray<UClass*> FoundClasses;
+		GetDerivedClasses(GetClass(), FoundClasses);
+
+		return FoundClasses.IsEmpty();
+	}
+
+	return false;
 }
 
 void UUISubsystem::RegisterPrimeLayoutWidget(UPrimaryLayoutWidget* LayoutWidgetToSet)
