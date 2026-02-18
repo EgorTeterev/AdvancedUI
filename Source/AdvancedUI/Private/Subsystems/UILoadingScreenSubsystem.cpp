@@ -21,7 +21,6 @@ bool UUILoadingScreenSubsystem::ShouldCreateSubsystem(UObject* Outer) const
 		TArray<UClass*> FoundClasses;
 		GetDerivedClasses(GetClass(), FoundClasses);
 
-		AUIDebug::ConsoleMessage(TEXT("Subsystem should be created"));
 		return FoundClasses.IsEmpty();
 	}
 
@@ -33,7 +32,6 @@ void UUILoadingScreenSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	FCoreUObjectDelegates::PreLoadMapWithContext.AddUObject(this, &ThisClass::OnMapPreloaded);
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &ThisClass::OnMapPostLoaded);
-	AUIDebug::ConsoleMessage(TEXT("Subsystem initialized"));
 }
 
 /** Implement this for deinitialization of instances of the system */
@@ -47,13 +45,10 @@ void UUILoadingScreenSubsystem::OnMapPreloaded(const FWorldContext& WorldContext
 {
 	if (WorldContext.OwningGameInstance != GetGameInstance())
 	{
-		AUIDebug::ConsoleMessage(TEXT("Something wrond with game instance,map cant load"));
-
 		return;
 	}
 
 	SetTickableTickType(ETickableTickType::Conditional);
-	AUIDebug::ConsoleMessage(TEXT("Map is loading"));
 
 	bIsCurrentlyLoadingMap = true;
 
@@ -70,29 +65,24 @@ void UUILoadingScreenSubsystem::OnMapPostLoaded(UWorld* LoadedWorld)
 
 void UUILoadingScreenSubsystem::TryUpdateLoadingScreen()
 {
-	AUIDebug::ConsoleMessage(TEXT("Trying update loading screen"));
-
 	if (IsLoadingScreenActive())
 	{
-		AUIDebug::ConsoleMessage(TEXT("Loading screen is already active"));
-
 		return;
 	}
 
 	if (ShouldShowLoadingScreen())
 	{
-		AUIDebug::ConsoleMessage(TEXT("Should show loading screen"));
 		TryDisplayLoadingScreen();
 
 		OnLoadingReasonChanged.Broadcast(CurrentLoadingReason);
 	}
 	else
 	{
-		AUIDebug::ConsoleMessage(TEXT("Should not show loading screen"));
-
 		TryRemoveLoadingScreen();
 
 		HoldLoadingScreenStartUpTime = -1.f;
+
+		NotifyLoadingScreenVisibilityChanged(false);
 
 		SetTickableTickType(ETickableTickType::Never);
 	}
@@ -102,7 +92,6 @@ void UUILoadingScreenSubsystem::TryDisplayLoadingScreen()
 {
 	if (CachedCreatedLoadingScreen)
 	{
-		AUIDebug::ConsoleMessage(TEXT("Loading screen is already exists"));
 		return;
 	}
 
@@ -127,17 +116,12 @@ void UUILoadingScreenSubsystem::TryRemoveLoadingScreen()
 {
 	if (!CachedCreatedLoadingScreen)
 	{
-		AUIDebug::ConsoleMessage(TEXT("Nothing to remove"));
-
 		return;
 	}
-
-	AUIDebug::ConsoleMessage(TEXT("Trying to remove loading screen"));
 
 	GetGameInstance()->GetGameViewportClient()->RemoveViewportWidgetContent(CachedCreatedLoadingScreen.ToSharedRef());
 	CachedCreatedLoadingScreen.Reset();
 
-	NotifyLoadingScreenVisibilityChanged(false);
 }
 
 void UUILoadingScreenSubsystem::NotifyLoadingScreenVisibilityChanged(bool bIsVisible)

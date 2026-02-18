@@ -21,7 +21,6 @@ void UListDataObject_StringResolution::InitResolutionValues()
 
 	for (const FIntPoint& Resolution : AvailableResolutions)
 	{
-		AUIDebug::ConsoleMessage(Resolution.ToString());
 		AddDynamicOption(ResToValueString(Resolution), ResToDisplayText(Resolution));
 	}
 

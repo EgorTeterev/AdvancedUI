@@ -18,7 +18,6 @@ void UPrimaryLayoutWidget::RegisterWidgetStack(UPARAM(meta = (Categories = "UI.W
 		if (!RegisteredWidgetStackMap.Contains(StackTag))
 		{
 			RegisteredWidgetStackMap.Add(StackTag,WidgetStack);
-			AUIDebug::ConsoleMessage(TEXT("Added to stack widget with tag") + StackTag.ToString());
 		}
 	}
 }
